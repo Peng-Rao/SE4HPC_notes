@@ -140,3 +140,47 @@ For Data-intensive applications:
 - *Reliability*
 - *Scalability*
 - *Maintainability*
+
+In the software, there can be some errors, but a software engineer should be able to recognize the type of failure, faults or defects. The fault can be of two types:
+- *Hardware Faults*
+- *Software Faults*
+
+== Systems Engineering Methods
+There are several systems engineering methodologies required in High Performance Computing.
+- Modelling the software structure and checking its properties.
+- Performance analysis and improvement.
+- Documentation, standards, support to maintainability.
+- Support to scalability.
+- Attention to operability and automation.
+
+#pagebreak()
+
+= Requirement Engineering
+== Definition
+*Requirement engineering* is the process of defining, documenting and maintaining requirements in the engineering design process. It is a critical part of software development and systems engineering. The questions derived from requirement engineering are:
+- Identify stakeholders
+- Identify their needs
+- Produce documentation
+- Analyze, communicate, implement requirements
+
+== Interplat between the world and the machine
+For an ambulance dispatching system:
+- For every urgent call reporting an incident, an ambulance should arrive at the incident location within 14 mins
+- For every urgent call, details about the incident are correctly encoded
+- When an ambulance is dispatched, it will reach the incident location in the shortest possible time
+- Accurate ambulance locations are known by GPS
+- Ambulance crews correctly notify ambulance availability through a mobile data terminal
+
+The *machine* is the part of the system to be developed (typically a software-to-be and a hardware). The *world* (or environment) is the part of the real world that is affected by the machine.
+
+Requirements engineering is *concerned with the phenomena that occur in the world*. In the previous example, RE is concerned with the following phenomena:
+- Occurrence of incidents
+- Reports of incidents by public calls
+- Encoding of call details into dispatching software
+- Assignment of an ambulance
+- Arrival of an ambulance at the scene of an incident
+
+But RE is also interested in the phenomena that occur inside the machine. In
+the previous example
+- The creation of a new object of the class `Incident`
+- The updating of a database entry
