@@ -184,3 +184,120 @@ But RE is also interested in the phenomena that occur inside the machine. In
 the previous example
 - The creation of a new object of the class `Incident`
 - The updating of a database entry
+Using the example on the previous page, we can show the phenomena we are interested in the world or in the machine set.
+
+#figure(
+  image("figures/World-machine-set.jpg", width: 80%),
+  caption: "World and machine set",
+)
+
+More generally, we can divide the machine and the world sets as:
+- The world which have goals and domain properties
+- The machine which have computers and programs
+- The requirements which is the bridge between the world and the machine.
+
+#figure(image("figures/bridge.jpg", width: 80%))
+
+We explain more detailed these value inside the two sets:
+- *Goals* are prescriptive assertions formulated in terms of world phenomena (not necessarily shared)
+- *Domain properties* are descriptive assertions assumed to hold in the world
+- *Requirements* are prescriptive assertions formulated in terms of shared phenomena
+
+Using the example, we can identify the goal, the domain assumptions and the requirement as follows:
+- *Goal*: For every urgent call reporting an incident, an ambulance should arrive at the incident scene within 14 minutes.
+- *Domain assumptions*
+  - For every urgent call, details about the incident are correctly encoded.
+  - When an ambulance is mobilized, it will reach the incident location in the shortest possible time.
+  - Accurate ambulances' location are known by GPS.
+  - Ambulance crews correctly signal ambulance availability through mobile data terminals on board of ambulances.
+- *Requirement*: When a call reporting a new incident is encoded, the Automated Dispatching Software should mobilize the nearest available ambu-lance according to information available from the ambulances' GPS and mobile data terminals.
+
+#definition("Completeness of Requirements")[
+  We say that $R$ is *complete* if and only if:
+  - *R* ensures satisfaction of *G* in the context of domain assumptions *D*
+  $
+    R "and" D | = G
+  $
+  - *G* captures all the stakeholders' needs.
+  - *D* represents *valid properties/assumptions about the world*.
+]
+
+== Formulating and classifying requirements
+The requirements can be of three types:
+- *Functional requirements*: describe the interactions between the system and its environment (independent from implementation). In other words, are the main (functional) goals the software has to realize.
+- *Non-functional requirements (NFRs)*: further characterization of user-visible aspects of the system not directly related to functions.
+- *Constraints requirements*: imposed by the customer or the environment in which the system operates.
+
+NFRs have some characteristics:
+- Constraints on *how functionality must be provided to the end user*
+- The application domain determines their *relevance* and their *prioritization*
+- Have a *strong influence on the structure of the system to be built*. For example, a system may require 24/7 availability. As a result, it is likely to be designed as a replicated system (with redundant components).
+
+== Eliciting requirements
+The *Requirements Elicitation* is the practice of researching and discovering the requirements of a system from users, customers, and other stakeholders. The goal of *requirements elicitation* is to ensure that the software development process is based on a clear and comprehensive under-standing of the custome's needs and requirements. To do that, exist a simple and effective tool called *_scenarios_*.
+
+#definition("Scenario")[
+  A scenario is a concrete, focused, informal description of a single feature of the system to be.
+]
+
+== Use cases
+Scenarios provide a nice summary of what the requirements analysis team can derive from observation, interviews, analysis of documentation. By generalizing the scenarios, we can get *Use Cases*.
+
+To specify a use case, it's very important to follow the following scheme.
+
+#definition("Use Case Schema")[
+  - *Name of Use Case*
+  - *Actors*: Description of Actors involved in the use case
+  - *Entry condition*: When this use case starts the following condition is true
+  - *Flow of Events*: Free form, informal natural language
+  - *Exit condition*: When this use case ends the following condition is true
+  - *Exceptions*: Describe what happens if things go wrong
+  - *Special Requirements*: Nonfunctional Requirements, Constraints.
+]
+
+The following suggestions are useful in defining an appropriate use cases:
+- Use cases named with *verbs* that indicate what the user is trying to accomplish
+- Actors named with *nouns*
+- Use cases steps in *active voice*
+- The causal relationship between steps should be clear
+- A use case per user transaction
+- Separate description of exceptions
+- Keep use cases small (no more than two/three pages)
+- The steps accomplished by actors and those accomplished by the system should be clearly distinguished (this helps us in identifying the boundaries of the system)
+
+#example("Bad Use case")[
+  Example of a bad use case referring to the ambulance dispatching:
+  - *Use case name*: Accident
+  - *Actors*: Field Officer
+  - *Flow of Events*:
+    + The Field Officer reports the accident
+    + An ambulance is dispatched
+    + The dispatcher is notified when the ambulance arrives on the site.
+
+  The errors are as follows:
+  - In the use case name field, *the word is a noun*. It's better to use a verb that indicates what the user is trying to achieve.
+  - The Dispatcher actor is not declared in the Participating Actors field, but is mentioned in the Flow of Events field.
+]
+Now we present an example of a _well composed_ use case.
+
+#example("Good Use case")[
+  There are two *actors* involved:
+  - *Field Officer*: the person who reports the accident
+  - *Dispatcher*: the person who dispatches the ambulance
+  The *Entry Condition* is always true because an emergency can be reported at any time. The *sequence of events* is as follows:
+  - The *FieldOfficer* activates the Report Emergency function of her terminal
+  - Friend (the system to be developed) responds by presenting a form to the officer
+  - The FieldOfficer fills the form, by selecting the emergency level, type, location, and brief description of the situation
+  - At which point, the Dispatcher is notified
+  - The Dispatcher reviews the submitted information and allocates resources by invoking the AllocateResources use case. The Dispatcher selects a response and acknowledges the emergency report
+
+  The *Exit Condition* is the following: the FieldOfficer has received the acknowledgment and the selected response.
+
+  There are two *exceptions*:
+  - The FieldOfficer is notified immediately if the connection between her terminal and the control room is lost
+  - The Dispatcher is notified immediately if the connection between any logged in FieldOfficer and the control room is lost
+
+  And the *Special Requirements* are:
+  - The FieldOfficer's report is acknowledged within 30 seconds
+  - The selected response arrives no later than 30 seconds after it is sent by the Dispatcher
+]
