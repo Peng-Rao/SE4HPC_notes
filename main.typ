@@ -301,3 +301,74 @@ Now we present an example of a _well composed_ use case.
   - The FieldOfficer's report is acknowledged within 30 seconds
   - The selected response arrives no later than 30 seconds after it is sent by the Dispatcher
 ]
+
+== UML Use Case Diagrams
+A Use Case Diagram is a type of *Unified Modeling Language (UML)* diagram that represents the interaction between actors (users or external systems) and a system under consideration to accomplish specific goals. It provides a high-level view of the system's functionality by illustrating the various ways users can interact with it.
+
+#definition("The shapes of a Use Case Diagram")[
+  - *Actors*:
+  #figure(image("figures/Actor.jpg", width: 50%))
+  - *Use Cases*:
+  #figure(image("figures/UseCase.jpg", width: 50%))
+  - *System Boundary*: The system boundary is a visual representation of the scope or limits of the system you are modeling. It defines what is inside the system and what is outside. The boundary helps to establish a clear distinction between the elements that are part of the system and those that are external to it. The system boundary is typically represented by a rectangular box that surrounds all the use cases of the system.
+  #figure(image("figures/system-boundary.jpg", width: 50%))
+]
+
+=== Association Relationship
+In a Use Case Diagram, *relationships* play a crucial role in depicting the interactions between actors and use cases. These relationships provide a comprehensive view of the system's functionality and its various scenarios. Take _Online Banking System_ as an example:
+- *Actor*: Customer
+- *Use Case*: Transfer Funds
+- *Association*: A line connecting the "Customer" actor to the "Transfer Funds" use case, indicating the customer's involvement in the funds transfer process.
+
+#figure(image("figures/asscociation.jpg", width: 50%))
+
+=== Include Relationship
+The *_Include Relationship_* indicates that a use case includes the functionality of another use case. It is denoted by a dashed arrow pointing from the including use case to the included use case. This relationship promotes modular and reusable design.
+- *Use Cases*: Compose Post, Add Image
+- *Include Relationship*: The "Compose Post" use case includes the functionality of "Add Image." Therefore, composing a post includes the action of adding an image.
+
+#figure(image("figures/include.jpg", width: 50%))
+
+=== Extend Relationship
+The *_Extend Relationship_* illustrates that a use case can be extended by another use case under specific conditions. It is represented by a dashed arrow with the keyword "extend." This relationship is useful for handling optional or exceptional behavior.
+
+#figure(image("figures/extend.jpg", width: 50%))
+
+=== Generalization Relationship
+The *_Generalization Relationship_* establishes an "is-a" connection between two use cases, indicating that one use case is a specialized version of another. It is represented by an arrow pointing from the specialized use case to the general use case.
+
+#figure(image("figures/generalization.jpg", width: 50%))
+
+Below are the main steps to draw use case diagram in UML:
++ *Identify Actors*: Determine who or what interacts with the system. These are your actors. They can be users, other systems, or external entities.
++ *Identify Use Cases*: Identify the main functionalities or actions the system must perform. These are your use cases. Each use case should represent a specific piece of functionality.
++ *Connect Actors and Use Cases*: Draw lines (associations) between actors and the use cases they are involved in. This represents the interactions between actors and the system.
++ *Add System Boundary*: Draw a box around the actors and use cases to represent the system boundary. This defines the scope of your system.
++ *Define Relationships*: If certain use cases are related or if one use case is an extension of another, you can indicate these relationships with appropriate notations.
++ *Review and Refine*: Step back and review your diagram. Ensure that it accurately represents the interactions and relationships in your system. Refine as needed.
++ *Validate*: Share your use case diagram with stakeholders and gather feedback. Ensure that it aligns with their understanding of the system's functionality.
+
+#example("Online Shopping System")[
+  Let's understand how to draw a Use Case diagram with the help of an Online Shopping System: \
+  *Actors*:
+  - Customer
+  - Admin
+  *Use Case*:
+  - Browse Products
+  - Add to Cart
+  - Checkout
+  - Manage Inventory (Admin)
+  *Relations*:
+  - The Customer can browse products, add to the cart, and complete the checkout.
+  - The Admin can manage the inventory.
+
+  #figure(
+    image("figures/use-cases-example.jpg", width: 80%),
+    caption: "Use Case Diagram for Online Shopping System",
+  )
+]
+
+#pagebreak()
+
+= Software Design
+== Software Architecture
