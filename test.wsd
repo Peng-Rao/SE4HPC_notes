@@ -1,70 +1,42 @@
 @startuml
 left to right direction
 
-' === Actors ===
-actor "Urban Area Manager" as UAM
-actor "Citizen" as Citizen
-actor "Traffic Sensor" as TS
-actor "Message Bus" as MB
-actor "Public Transport Microservice" as PTM
+actor "Traffic Sensors" as TS
 actor "News Channel" as NC
-actor "Traffic Lights" as TL
-actor "Legacy Systems" as LS
+actor "Urban Area Managers" as UAM
+actor "Public Transport Microservice" as PTM
+actor "Citizens" as C
 
-' === Use Cases by Action Type ===
-rectangle "Type1 Actions (Real-Time)" {
-  (Monitor Traffic Flow) as UC1
-  (Analyze Traffic Data) as UC2
-  (Adjust Traffic Light Durations) as UC3
-  (Log Type1 Actions) as UC4
+rectangle "SustainCity System" {
+  usecase "Dynamic Traffic Light Adjustment" as UC1
+  usecase "Analyze Daily Traffic Patterns" as UC2
+  usecase "Manage Event-Specific Configurations" as UC3
+
+  usecase "Generate Reports" as REPORT
+  usecase "Daily Traffic Report" as DAILY
+  usecase "Yearly Optimization Report" as YEARLY
+
+  TS --> UC1
+  NC --> UC3
+  UAM --> (UC1)
+  UAM --> (UC2)
+  UAM --> (UC3)
+  PTM --> UC1
+  PTM --> UC2
+  PTM --> UC3
+  C --> DAILY
+  C --> YEARLY
+
+  UC1 ..> DAILY : <<include>>
+  UC2 ..> YEARLY : <<include>>
+  UC3 ..> DAILY : <<include>>
+
+  REPORT <|-- DAILY
+  REPORT <|-- YEARLY
 }
 
-rectangle "Type2 Actions (Daily Optimization)" {
-  (Generate Traffic Pattern Report) as UC5
-  (Analyze Historical Data) as UC6
-  (Suggest Infrastructure Changes) as UC7
-}
-
-rectangle "Type3 Actions (Event-Driven)" {
-  (Monitor Event Announcements) as UC8
-  (Generate Event Traffic Plan) as UC9
-  (Update Public Transport Schedules) as UC10
-}
-
-rectangle "Reporting" {
-  (Generate Daily Reports) as UC11
-  (Generate Yearly Reports) as UC12
-  (Publish Reports) as UC13
-}
-
-' === Actor Connections ===
-TS --> UC1
-MB --> UC1
-UC1 --> UC2
-UC2 --> UC3
-UC3 --> TL
-UC3 --> UC4
-
-LS --> UC6
-UC6 --> UC5
-UC5 --> UC7
-PTM --> UC7
-UAM --> UC7
-
-NC --> UC8
-UC8 --> UC9
-UAM --> UC9
-UC9 --> UC10
-PTM --> UC10
-
-UC5 --> UC11
-UC6 --> UC11
-UC7 --> UC12
-UC9 --> UC12
-UC11 --> UC13
-UC12 --> UC13
-Citizen --> UC13
-UAM --> UC11
-UAM --> UC12
-
-@enduml
+note bottom of REPORT
+  Generalization: Daily and Yearly Reports
+  inherit from the abstract 'Generate Reports'.
+end note
+@enduml1

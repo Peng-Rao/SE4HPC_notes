@@ -256,7 +256,7 @@ To specify a use case, it's very important to follow the following scheme.
 ]
 
 The following suggestions are useful in defining an appropriate use cases:
-- Use cases named with *verbs* that indicate what the user is trying to accomplish
+- Use cases named with *verbs* that indicate hat the user is trying to accomplish
 - Actors named with *nouns*
 - Use cases steps in *active voice*
 - The causal relationship between steps should be clear
@@ -372,3 +372,29 @@ Below are the main steps to draw use case diagram in UML:
 
 = Software Design
 == Software Architecture
+The Architecture is so *important* because it is the vehicle for communication: internal (different teams) and external (teams and stakeholders). The Architecture manifests the first set of design decisions and is a portable abstraction of a system.
+
+#definition("Software Architecture")[
+  The *_Software Architecture (SA)_* of a system is the *set of structures* needed to reason about the system. These structures comprise software *elements*, *relations* among them, and *properties* of both.
+]
+
+== Architecture and multiple structures
+=== Component-and-connector (C&C) structures
+Describe how the system is structured as a *set of elements* that have *runtime behavior* (components) and *interactions* (connectors).
+- The *components* are the principal units of computation (for example the clients, servers, services, etc.)
+- The *connectors* represent communication (for example request-response mechanisms, pipes, asynchronous messages, etc.)
+
+=== Module structures
+Show how a system is structured as *a set of code or data units* that have to be procured or constructed, *together with their relations*. An example of modules: packages, classes, functions, libraries, layers, database tables, etc.
+
+Modules constitute *implementation units* that can be used as the basis for work splitting (identifying functional areas of responsibility). Typical relations among modules are: uses, is-a (generalization), is-part-of.
+
+=== Allocation structures
+Define *how the elements* from component-and-connector or module structures *map* onto things that are not software. For example hardware (possibly virtualized), file systems, teams. Some typical allocation structures include deployment structure, implementation structure, work assignment structure.
+
+== Software design descriptions and UML
+=== Component Diagram (C&C structure)
+A *Component Diagram* breaks down the actual system under development into *various high levels of functionality*. Each component is responsible for one clear aim within the entire system and only interacts with other essential elements on a need-to-know basis.
+
+=== Sequence Diagram (C&C structure)
+Sequence Diagram show elements as they interact over time and they are organized according to object (horizontally) and time (vertically).
