@@ -513,3 +513,21 @@ To model conditions we use *guards* in UML. They are used when we need to restri
 
   #figure(image("figures/guard-messages.jpg", width: 50%))
 ]
+
+
+==== How to create Sequence Diagrams
+Creating a sequence diagram involves several steps, and it's typically done during the design phase of software development to illustrate how *different components* or *objects interact* over time. Here's a step-by-step guide on how to create sequence diagrams:
+
++ *Identify the Scenario*: Understand the specific scenario or use case that you want to represent in the sequence diagram. This could be a specific interaction between objects or the flow of messages in a particular process.
++ *List the Participants*: Identify the participants (objects or actors) involved in the scenario. Participants can be users, systems, or external entities.
++ *Define Lifelines*: Draw a vertical dashed line for each participant, representing the lifeline of each object over time. The lifeline represents the existence of an object during the interaction.
++ *Arrange Lifelines*: Position the lifelines horizontally in the order of their involvement in the interaction. This helps in visualizing the flow of messages between participants.
++ *Add Activation Bars*: For each message, draw an activation bar on the lifeline of the sending participant. The activation bar represents the duration of time during which the participant is actively processing the message.
++ *Draw Messages*: Use arrows to represent messages between participants. Messages flow horizontally between lifelines, indicating the communication between objects. Different types of messages include synchronous (solid arrow), asynchronous (dashed arrow), and self-messages.
++ *Include Return Messages*: If a participant sends a response message, draw a dashed arrow returning to the original sender to represent the return message.
++ *Indicate Timing and Order*: Use numbers to indicate the order of messages in the sequence. You can also use vertical dashed lines to represent occurrences of events or the passage of time.
++ *Include Conditions and Loops*: Use combined fragments to represent conditions (like if statements) and loops in the interaction. This adds complexity to the sequence diagram and helps in detailing the control flow.
++ *Consider Parallel Execution*: If there are parallel activities happening, represent them by drawing parallel vertical dashed lines and placing the messages accordingly.
++ *Review and Refine*: Review the sequence diagram for clarity and correctness. Ensure that it accurately represents the intended interaction. Refine as needed.
++ *Add Annotations and Comments*: Include any additional information, annotations, or comments that provide context or clarification for elements in the diagram.
++ *Document Assumptions and Constraints*: If there are any assumptions or constraints related to the interaction, document them alongside the diagram.
