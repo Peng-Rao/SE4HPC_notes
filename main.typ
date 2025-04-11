@@ -397,4 +397,119 @@ Define *how the elements* from component-and-connector or module structures *map
 A *Component Diagram* breaks down the actual system under development into *various high levels of functionality*. Each component is responsible for one clear aim within the entire system and only interacts with other essential elements on a need-to-know basis.
 
 === Sequence Diagram (C&C structure)
-Sequence Diagram show elements as they interact over time and they are organized according to object (horizontally) and time (vertically).
+A *Sequence Diagram* is a key component of Unified Modeling Language (UML) used to visualize the interaction between objects in a sequential order. It focuses on *how objects communicate with each other over time*, making it an essential tool for modeling dynamic behavior in a system. Sequence diagrams illustrate object interactions, message flows, and the sequence of operations, making them valuable for understanding use cases, designing system architecture, and documenting complex processes.
+
+==== Actors
+An actor in a UML diagram represents a type of role where it interacts with the system and its objects. It is important to note here that an actor is always outside the scope of the system we aim to model using the UML diagram.
+
+#figure(image("figures/actors.jpg", width: 50%))
+
+We represent an actor in a UML diagram using a stick person notation. We can have multiple actors in a sequence diagram.
+
+#example("Actors")[
+  Here the user in seat reservation system is shown as an actor where it exists outside the system and is not a part of the system.
+
+  #figure(image("figures/actors-example.jpg", width: 50%))
+]
+
+==== Lifelines
+A *lifeline* is a named element which depicts an individual participant in a sequence diagram. So basically each instance in a sequence diagram is represented by a lifeline. Lifeline elements are located at the top in a sequence diagram.
+
+#figure(image("figures/lifelines.jpg", width: 50%))
+
+We display a lifeline in a rectangle called head with its name and type. The head is located on top of a vertical dashed line (referred to as the stem) as shown above.
+- If we want to model an unnamed instance, we follow the same pattern except now the portion of lifeline's name is left blank.
+- *Difference between a lifeline and an actor*: A lifeline always portrays an object internal to the system whereas actors are used to depict objects external to the system.
+
+#example("Lifelines")[
+  The following is an example of a sequence diagram:
+  #figure(image("figures/lifelines-example.jpg", width: 50%))
+]
+
+==== Messages
+Communication between objects is depicted using messages. The messages appear in a sequential order on the lifeline.
+- We represent messages using arrows.
+- Lifelines and messages form the core of a sequence diagram.
+
+#figure(image("figures/messages.jpg", width: 50%))
+
+Messages can be broadly classified into the following categories:
+
+===== Synchronous Messages
+A *synchronous message* waits for a reply before the interaction can move forward. The sender waits until the receiver has completed the processing of the message. The caller continues only when it knows that the receiver has processed the previous message i.e. it receives a reply message.
+- A large number of calls in *object oriented programming* are synchronous.
+- We use a *solid arrow* head to represent a synchronous message.
+
+#figure(image("figures/synchronous-messages.jpg", width: 50%))
+
+===== Asynchronous Messages
+An *asynchronous message* does not wait for a reply from the receiver. The interaction moves forward irrespective of the receiver processing the previous message or not. We use a lined arrow head to represent an asynchronous message.
+
+#figure(image("figures/asynchronous-messages.jpg", width: 50%))
+
+===== Create Messages
+We use a *Create message* to instantiate a new object in the sequence diagram. There are situations when a particular message call requires the creation of an object. It is represented with a dotted arrow and create word labelled on it to specify that it is the create Message symbol.
+
+#figure(image("figures/create-messages.jpg", width: 50%))
+
+===== Delete Messages
+We use a *Delete Message* to delete an object. When an object is deallocated memory or is destroyed within the system we use the Delete Message symbol. It destroys the occurrence of the object in the system.It is represented by an arrow terminating with a `x`.
+
+#figure(image("figures/delete-messages.jpg", width: 50%))
+
+===== Self Message
+Certain scenarios might arise where the object needs to send a message to itself. Such messages are called *Self Messages* and are represented with a *U shaped arrow*.
+
+#figure(image("figures/self-messages.jpg", width: 50%))
+
+#example("self-messages")[
+  Consider a scenario where the device wants to access its webcam. Such a scenario is represented using a self message.
+
+  #figure(image("figures/self-messages-example.jpg", width: 50%))
+]
+
+===== Reply Messages
+*Reply messages* are used to show the message being sent from the receiver to the sender. We represent a return/reply message using an open arrow head with a dotted line. The interaction moves forward only when a reply message is sent by the receiver.
+
+#figure(image("figures/reply-messages.jpg", width: 50%))
+
+#example("reply-messages")[
+  Consider the scenario where the device requests a photo from the user. Here the message which shows the photo being sent is a reply message.
+
+  #figure(image("figures/reply-messages-example.jpg", width: 50%))
+]
+
+===== Found Messages
+A Found message is used to represent a scenario where an unknown source sends the message. It is represented using an *arrow directed towards a lifeline* from an end point.
+
+#example("Found message")[
+  Consider the scenario of a hardware failure.
+
+  #figure(image("figures/found-messages.jpg", width: 50%))
+
+  It can be due to multiple reasons and we are not certain as to what caused the hardware failure.
+
+  #figure(image("figures/found-messages-example.jpg", width: 50%))
+]
+
+===== Lost Messages
+A Lost message is used to represent a scenario where the recipient is not known to the system. It is represented using an arrow directed towards an end point from a lifeline.
+
+#example("Lost message")[
+  Consider a scenario where a warning is generated.
+
+  #figure(image("figures/lost-messages.jpg", width: 50%))
+
+  The warning might be generated for the user or other software/object that the lifeline is interacting with. Since the destination is not known before hand, we use the Lost Message symbol.
+
+  #figure(image("figures/lost-messages-example.jpg", width: 50%))
+]
+
+===== Guard Messages
+To model conditions we use *guards* in UML. They are used when we need to restrict the flow of messages on the pretext of a condition being met. Guards play an important role in letting software developers know the constraints attached to a system or a particular process.
+
+#example("Guard message")[
+  In order to be able to withdraw cash, having a balance greater than zero is a condition that must be met as shown below.
+
+  #figure(image("figures/guard-messages.jpg", width: 50%))
+]
