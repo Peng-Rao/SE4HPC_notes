@@ -1,42 +1,59 @@
 @startuml
-left to right direction
+actor "News Channel" as NewsChannel
+participant "Traffic Manager System" as TrafficManager
+participant "Event Collector" as EventCollector
+participant "Message Bus" as MessageBus
+participant "Public Transport Service" as PublicTransport
+participant "Traffic Analysis" as TrafficAnalysis
+actor "Urban Manager" as UrbanManager
+participant "City Infrastructure" as CityInfra
+participant "Logger" as Logger
+actor "Citizens" as Citizens
 
-actor "Traffic Sensors" as TS
-actor "News Channel" as NC
-actor "Urban Area Managers" as UAM
-actor "Public Transport Microservice" as PTM
-actor "Citizens" as C
+NewsChannel -> TrafficManager: Event Announcement (e.g., concert)
+activate TrafficManager
 
-rectangle "SustainCity System" {
-  usecase "Dynamic Traffic Light Adjustment" as UC1
-  usecase "Analyze Daily Traffic Patterns" as UC2
-  usecase "Manage Event-Specific Configurations" as UC3
+TrafficManager -> EventCollector: Trigger Event Handling
+activate EventCollector
 
-  usecase "Generate Reports" as REPORT
-  usecase "Daily Traffic Report" as DAILY
-  usecase "Yearly Optimization Report" as YEARLY
+EventCollector -> MessageBus: Request Traffic Sensor Data
+activate MessageBus
+MessageBus --> EventCollector: Raw Traffic Data
+deactivate MessageBus
 
-  TS --> UC1
-  NC --> UC3
-  UAM --> (UC1)
-  UAM --> (UC2)
-  UAM --> (UC3)
-  PTM --> UC1
-  PTM --> UC2
-  PTM --> UC3
-  C --> DAILY
-  C --> YEARLY
+EventCollector -> PublicTransport: getScheduleByStreet(street)
+activate PublicTransport
+PublicTransport --> EventCollector: Schedule Data
+deactivate PublicTransport
 
-  UC1 ..> DAILY : <<include>>
-  UC2 ..> YEARLY : <<include>>
-  UC3 ..> DAILY : <<include>>
+EventCollector -> EventCollector: **Process & Aggregate Data**
+activate EventCollector
 
-  REPORT <|-- DAILY
-  REPORT <|-- YEARLY
-}
+EventCollector -> TrafficAnalysis: Analyze Impact (event + data)
+activate TrafficAnalysis
+TrafficAnalysis --> EventCollector: Suggested Configurations
+deactivate TrafficAnalysis
 
-note bottom of REPORT
-  Generalization: Daily and Yearly Reports
-  inherit from the abstract 'Generate Reports'.
-end note
-@enduml1
+EventCollector -> TrafficManager: Submit Proposal (config)
+deactivate EventCollector
+TrafficManager -> UrbanManager: Review Proposal
+activate UrbanManager
+UrbanManager --> TrafficManager: Approval/Rejection
+deactivate UrbanManager
+
+alt Approved
+  TrafficManager -> CityInfra: Apply Configurations\n(Traffic Lights, Roads, Transport)
+  activate CityInfra
+  CityInfra --> TrafficManager: Success
+  deactivate CityInfra
+
+  TrafficManager -> Logger: Log Event & Config
+  activate Logger
+  Logger --> TrafficManager: Log Confirmation
+  deactivate Logger
+
+  TrafficManager -> Citizens: Publish Daily Report
+end
+
+deactivate TrafficManager
+@enduml

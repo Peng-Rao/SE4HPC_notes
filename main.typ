@@ -396,6 +396,65 @@ Define *how the elements* from component-and-connector or module structures *map
 === Component Diagram (C&C structure)
 A *Component Diagram* breaks down the actual system under development into *various high levels of functionality*. Each component is responsible for one clear aim within the entire system and only interacts with other essential elements on a need-to-know basis.
 
+Component-Based Diagrams in UML comprise several key elements, each serving a distinct role in illustrating the system's architecture. Here are the main components and their roles:
+
+==== Component
+Represent modular parts of the system that encapsulate functionalities. Components can be *software classes, collections of classes, or subsystems*.
+- *Symbol*: *Rectangles* with the component stereotype («component»).
+- *Function*: Define and encapsulate functionality, ensuring *modularity and reusability*.
+
+#figure(image("figures/components.jpg", width: 50%))
+
+==== Interfaces
+Specify a set of operations that a component offers or requires, serving as a contract between the component and its environment.
+- *Symbol*: *Circles* (lollipops) for provided interfaces and half-circles (sockets) for required interfaces.
+- *Function*: Define how components communicate with each other, ensuring that components can be developed and maintained independently.
+
+#figure(image("figures/interfaces.jpg", width: 50%))
+
+==== Relationships
+Depict the connections and dependencies between components and interfaces.
+- *Symbol*: Lines and arrows.
+  - *Dependency (dashed arrow)*: Indicates that one component relies on another.
+  - *Association (solid line)*: Shows a more permanent relationship between components.
+  - *Assembly connector*: Connects a required interface of one component to a provided interface of another.
+- *Function*: Illustrate how components interact and depend on each other, helping to visualize the overall architecture of the system.
+
+#figure(image("figures/relationships.jpg", width: 50%))
+
+
+==== Ports
+Role: Represent specific interaction points on the boundary of a component where interfaces are provided or required.
+- *Symbol*: Small squares on the component boundary.
+- *Function*: Allow for more precise specification of interaction points, facilitating detailed design and implementation.
+
+#figure(image("figures/ports.jpg", width: 50%))
+
+==== Artifacts
+Represent physical files or data that are deployed on nodes.
+- *Symbol*: Rectangles with the artifact stereotype («artifact»).
+- *Function*: Show how software artifacts, like executables or data files, relate to the components.
+
+#figure(image("figures/artifacts.jpg", width: 50%))
+
+==== Nodes
+Represent physical or virtual execution environments where components are deployed.
+- *Symbol*: 3D boxes.
+- *Function*: Provide context for deployment, showing where components reside and execute within the system's infrastructure.
+
+#figure(image("figures/nodes.jpg", width: 50%))
+
+==== Steps to Create Component-Based Diagrams
+From understanding the system requirements to creating the final design, there are multiple processes involved in creating a component-based diagram. These steps will assist you in creating the ideal component-based diagram:
++ *Identify the System Scope and Requirements*
++ *Identify and Define Components*
++ *Identify Provided and Required Interfaces*
++ *Identify Relationships and Dependencies*
++ *Identify Artifacts*
++ *Identify Nodes*
++ *Draw the Diagram*
++ *Review and Refine the Diagram*
+
 === Sequence Diagram (C&C structure)
 A *Sequence Diagram* is a key component of Unified Modeling Language (UML) used to visualize the interaction between objects in a sequential order. It focuses on *how objects communicate with each other over time*, making it an essential tool for modeling dynamic behavior in a system. Sequence diagrams illustrate object interactions, message flows, and the sequence of operations, making them valuable for understanding use cases, designing system architecture, and documenting complex processes.
 
