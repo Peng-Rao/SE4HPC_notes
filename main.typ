@@ -1,4 +1,6 @@
 #import "@local/simple-note:0.0.1": *
+#show: codly-init.with()
+
 
 #show: simple-note.with(
   title: [
@@ -590,3 +592,68 @@ Creating a sequence diagram involves several steps, and it's typically done duri
 + *Review and Refine*: Review the sequence diagram for clarity and correctness. Ensure that it accurately represents the intended interaction. Refine as needed.
 + *Add Annotations and Comments*: Include any additional information, annotations, or comments that provide context or clarification for elements in the diagram.
 + *Document Assumptions and Constraints*: If there are any assumptions or constraints related to the interaction, document them alongside the diagram.
+
+== Design Principal
+=== Divide and Conquer
+Divide and Conquer is a *problem-solving strategy* that involves breaking down a complex problem into smaller, more manageable parts, solving each part individually, and then combining the solutions to solve the original problem.
+
+=== Keep the level of abstraction as high as possible
+Ensure that your designs allow you to hide or defer consideration of details, thus reducing complexity. A good abstraction is said to provide information hiding. Abstractions allow you to understand the essence of a subsystem without having to know unnecessary details.
+
+=== Increase cohesion where possible
+In general, a file, module, class or whatever should contain the same logical methods. For example, in the following class we have two functions with two different purposes (error!).
+
+```java
+Class Utility {
+  ComputeAverageScore ( Student s [])
+  ReduceImage ( Image i )
+}
+```
+
+=== Reduce coupling where possible
+Coupling is the degree of interdependence between software modules; a measure of how closely connected two routines or modules are; the strength of the relationships between modules. There are different types of couplings:
+- *Content Coupling* is said to occur when one module uses the code of another module, for instance a branch. This violates information hiding (2nd design principle).
+- *Communication coupling* is said to occur when one module sends too many messages to another module. The creation of a message can be optimized and the number of messages sent between these two modules can be reduced.
+- *Control coupling* is one module controlling the flow of another, by passing it information on what to do. For example, passing a what-to-do flag or the following code:
+
+```java
+class b {
+    func(flag f) {
+        if (f == flag1) do this
+        else if (f == flag2) do that
+        else...
+    }
+}
+```
+
+=== Design for reusability
+Design the various aspects of your system so that they can be used again in other contexts. To do this, you need to follow these rules:
+- Generalize your design as much as possible;
+- Simplify your design as much as possible;
+- Follow the preceding all other design principles;
+- Design your system to be *extensible*.
+
+=== Reuse existing designs and code
+Design with reuse is *complementary* to design for reusability. Take advantage of the investment you or others have made in reusable components. Note: cloning should not be seen as a form of reuse.
+
+=== Design for flexibility
+Actively anticipate changes that a design may have to undergo in the future, and prepare for them. To do this, you need to follow these rules:
+
+=== Anticipate obsolescence
+Plan for changes in the technology or environment so the software will continue to run or can be easily changed. So do not rush using early releases of technology. If possible:
+- Avoid using software libraries that are specific to particular environments;
+- Avoid using undocumented features or little-used features of software libraries;
+- Avoid using software or special hardware from companies that are less likely to provide long-term support;
+- Use standard languages and technologies that are supported by multiple vendors.
+
+=== Design for portability
+Have the software run on as many platforms as possible. Avoid, if possible, the use of facilities that are specific to one particular environment (e.g. a library only available in Microsoft Windows).
+
+=== Design for testability
+Design the system so that it can be tested easily. To do this, you need to follow these rules:
+- Ensure that all the functionality of the code can be driven by an external program, bypassing a graphical user interface;
+- Create proper code to exercise the other methods/functions;
+- Use unit test automation frameworks.
+
+=== Design defensively
+Be careful when you trust how others will try to use a component you are designing. Handle all cases where other code might attempt to use your component inappropriately. Check that all of the inputs to your component are valid: the preconditions. Unfortunately, over-zealous defensive design can result in unnecessarily repetitive checking.
