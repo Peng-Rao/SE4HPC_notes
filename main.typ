@@ -657,3 +657,29 @@ Design the system so that it can be tested easily. To do this, you need to follo
 
 === Design defensively
 Be careful when you trust how others will try to use a component you are designing. Handle all cases where other code might attempt to use your component inappropriately. Check that all of the inputs to your component are valid: the preconditions. Unfortunately, over-zealous defensive design can result in unnecessarily repetitive checking.
+
+#pagebreak()
+
+= architectural Style
+An architectural style determines the vocabulary of components and connectors that can be used in instances of that style, together with a set of constraints on how they can be combined.
+
+== Client-Server
+A *Client-Server Architecture* is a *network-based computing structure* where responsibilities and operations get *distributed between clients and servers*. Client-Server Architecture is widely used for network applications such as email, web, online banking, e-commerce, etc.
+
+#tip("When to use it")[
+  The three most common cases are:
+  - When *multiple users* need to access a *single resource* (e.g. database).
+  - When there is a *preexisting software* and we must access remotely (e.g. email server).
+  - When it is convenient to organize the system around a shared *piece of functionality used by multiple components* (e.g. authentication or authorization server).
+]
+
+With this architecture, it's necessary to design and *document proper interfaces* for our server. It is also necessary to ensure that the server can handle *multiple simultaneous requests*.
+
+=== Interface Design
+An interface is a *boundary* across which components interact. Proper definition of interfaces is an architectural concern (affects maintainability, usability, testability, performance, integrability).
+
+There are two important guiding principles for interface design: *information hiding and low coupling*. An interface should *encapsulate* a component implementation so that it can be changed without affecting other components. There are several aspects to interface design that need to be considered:
+- *Contract principle*: any resource (operation, data) added to an interface implies a commitment to maintaining it.
+- *Least surprise principle*: interfaces should behave consistently with expectations.
+- *Small interfaces principle*: interfaces should limit the exposed resources to the minimum.
+There are also some important elements to define: *interaction style* (e.g. sockets, RPC, REST); representation and *structure of exchanged data* (affecting expressiveness, interoperability, performance and transparency); *error handling*.
