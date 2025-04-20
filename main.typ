@@ -730,3 +730,60 @@ Worker Pooling Advantages (quality attribute trade-offs)
 - *Each worker* has a *queue*.
 - When *queues* are *full* the dispatcher drops the incoming requests to keep high performance (optimize scalability and performance by sacrificing availability).
 - Dispatcher balances the workload among available workers according to specific policies.
+
+
+== Three-Tier Architecture
+*Three-tier architecture* is a well-established software application architecture that organizes applications into three logical and physical computing tiers:
+- The *presentation tier*, or user interface;
+- The *application tier*, where data is processed;
+- The *data tier*, where application data is stored and managed.
+
+=== Benefits
+The chief benefit of three-tier architecture is its logical and physical separation of functionality. Each tier can run on a separate operating system and server platform - for example, web server, application server, database server -that best fits its functional requirements. And each tier runs on at least one dedicated server hardware or virtual server, so the services of each tier can be customized and optimized without impacting the other tiers. Other benefits include:
+- *Faster development*: Because each tier can be developed simultaneously by different teams, an organization can bring the application to market faster. And programmers can use the latest and best languages and tools for each tier.
+- *Improved scalability*: Any tier can be scaled independently of the others as needed.
+- *Improved reliability*: An outage in one tier is less likely to impact the availability or performance of the other tiers.
+- *Improved security*: Because the presentation tier and data tier can't communicate directly, a well-designed application tier can function as an internal firewall, preventing SQL injections and other malicious exploits.
+
+== Microservice architectural style
+The microservice architectural style is an approach to developing a single application as a suite of *small services*, each running in its own process and communicating *lightweight mechanisms*, often an HTTP resource API.
+
+=== Benefits
+There are two main benefits:
+- *Technology heterogeneity*. *Each service uses its own technology stack*. The technology stack can be selected to fit the task best (e.g. data analysis vs video streaming). The teams can experiment with new technologies within a single microservice (e.g. we can deploy two versions and do A/B testing). Also, no unnecessary dependencies or libraries for each service.
+- *Scaling. Each microservice can be scaled independently*. Also, identified bottlenecks can be addressed directly. Parts of the system that do not represent bottlenecks can remain simple and unscaled.
+
+== Event-Driven Architecture
+An *Event-Driven Architecture* uses *events to trigger and communicate between decoupled services* and is common in modern applications built with microservices. An event is a change in state, or an update, like an item being placed in a shopping cart on an e-commerce website. Events can either carry the state (the item purchased, its price, and a delivery address) or events can be identifiers (a notification that an order was shipped).
+
+Often it's called *publish-subscribe* (publish is the event generation, and subscribe is the declaration of the interest).
+
+=== Benefits
+- *Very common in modern development practices* (e.g. continuous integration and deployment, such as GitHub Actions).
+- *Easy addition/deletion of components* (publishers and subscribers are decoupled; the event dispatcher handles this dynamic set).
+
+=== Problems
+- *Potential scalability problems* (the event dispatcher may become a bottleneck under high workload).
+- *Ordering of events* (not guaranteed, not straightforward).
+
+Other characteristics of this architecture:
+- The messages and the events are *asynchronous*.
+- Computation is *reactive* (driven by receipt of message).
+- *Destination* of messages determined by receiver, not sender (location/identity abstraction).
+- *Loose coupling* (senders and receivers added without reconfiguration).
+- *Flexible* communication means (one-to-many, many-to-one, many-to-many).
+
+Some examples of relevant technologies are: `Apache Kafka` and `RabbitMQ`.
+
+#example("Apache Kafka")[
+  Kafka is a framework for the event-driven paradigm:
+  - Includes primitives to create *event produces* and *consumers* and a runtime infrastructure to handle *event transfer* from producers to consumers.
+  - *Stores events* durably and reliably.
+  - Allow consumers to process events as they occur or retrospectively.
+  These services are offered in a distributed, highly scalable, elastic, fault-tolerant, and secure manner.
+
+  #figure(
+    image("figures/Kafka-architecture.jpg", width: 70%),
+    caption: [ Kafka architecture (the ZooKeeper is a "health manager") ],
+  )
+]
