@@ -683,3 +683,50 @@ There are two important guiding principles for interface design: *information hi
 - *Least surprise principle*: interfaces should behave consistently with expectations.
 - *Small interfaces principle*: interfaces should limit the exposed resources to the minimum.
 There are also some important elements to define: *interaction style* (e.g. sockets, RPC, REST); representation and *structure of exchanged data* (affecting expressiveness, interoperability, performance and transparency); *error handling*.
+
+=== Error handling, multiple interfaces and interface evolution
+Sometimes there may be some problems, for example: an operation is called with invalid parameters and consequently the call doesn't return anything. This simple example can provoke some scenarios: the component cannot handle the request in its current state; or hardware/software errors prevent successful execution; or there is a misconfiguration issue (e.g. the server is not correctly connected to the database).
+
+A *server* can offer *multiple interfaces* at the same time. This enables separation of concerns, different levels of access rights and support ot *interface evolution*.
+
+*Interface evolution* occurs for many reasons (e.g. to support new requirements). Several strategies are needed to support continuity:
+- *Deprecation*: declare well in advance that an interface version will be retired by a certain date;
+- *Versioning*: maintain multiple active versions of the interface;
+- *Extension*: a new version extends the previous one.
+
+=== Handling multiple requests
+The server must be able to receive and process requests from multiple clients. There are two main approaches to this: _forking and worker pooling_.
+
+==== Forking
+The forking approach is the same as that used by the Apache Web Server: one process per request or per client.
+
+#figure(
+  image("figures/forking-diagrams.jpg", width: 60%),
+  caption: "Forking diagrams",
+)
+
+Forking Advantages:
+- Architectural *simplicity*.
+- *Isolation* and *protection* given by the one-connection-per-process model. Note: slow processes do not affect other incoming connections.
+- *Simple to program*.
+
+Forking Issues:
+- Growth of the WWW over the last 20 years (number of users and weight of web pages).
+- The number of *active processes* at time $t$ is *difficult to predict* and may *saturate resources*.
+- *Expensive* fork-kill operations for each *incoming connection*.
+
+==== Worker pooling
+It is an alternative approach adopted by NGINX Web Server. It is designed for high concurrency but has to deal with scalability issues.
+
+#figure(
+  image("figures/worker-pooling-diagrams.jpg", width: 60%),
+  caption: "Worker pooling diagrams",
+)
+
+Despite the well-known problem of this architecture (scalability), NGINX addresses the previous problems by introducing a new *architectural tactic*. A tactic is a design decision that affects the control of one or more quality attributes.
+
+Worker Pooling Advantages (quality attribute trade-offs)
+- *Number of workers* is *fixed*, so they do not saturate available resources.
+- *Each worker* has a *queue*.
+- When *queues* are *full* the dispatcher drops the incoming requests to keep high performance (optimize scalability and performance by sacrificing availability).
+- Dispatcher balances the workload among available workers according to specific policies.
