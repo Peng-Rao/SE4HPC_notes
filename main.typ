@@ -61,7 +61,7 @@ only is the product significant, but the process is also fundamental. The qualit
 
 == The software product and the process
 The product developed by a software engineer differs from traditional product types. It isn't easy to describe and evaluate because it is intangible. Some *aspects affecting the product quality*:
-- Devlopment technology
+- Development technology
 - Process quality
 - People quality
 - Cost, time and schedule
@@ -88,7 +88,7 @@ As you can see by the graph, the "user needs" is a linear function. A software e
 == Software Lifecycle
 Initially, no reference model is inside a software lifecycle: code and fix(or refactoring). However, a traditional waterfall model is chosen to react to the many problems that a software engineer faces.
 
-=== Waterafall model
+=== Waterfall model
 The *waterfall model* is a breakdown of development activities into linear sequential phases, meaning they are passed down onto each other, where each phase depends on the deliverables of the previous one and corresponds to a specialization of tasks. Its organization is the following:
 *High phases*:
 - *Feasibility Study*: this is a cost-benefit analysis. The main goal is determining whether the project should be started, possible alternatives, and needed resources. The outcome is a feasibility study document. This paper provides
@@ -96,11 +96,11 @@ The *waterfall model* is a breakdown of development activities into linear seque
   - Some scenarios describing possible solutions
   - Costs and schedules for the different alternatives
 - *Requirement analysis and specification*: this is an analysis of the domain in which the application takes place. The main goal is to identify requirements and derive specifications for the software. Note these specifics require a interaction with the user and an understanding of the properties of the domain. The *outcome* is a particular document called *Requirements Analysis and Specification Document* (RASD).
-- *Design*: this is the *definition of the software architecture*. There, the definition of components (modules) and the relations/in-teractions among these components. The *main goal* is to support the concurrent development of separate responsibilities. The outcome is a summary of this info in a *design document*.
+- *Design*: this is the *definition of the software architecture*. There, the definition of components (modules) and the relations/interactions among these components. The *main goal* is to support the concurrent development of separate responsibilities. The outcome is a summary of this info in a *design document*.
 *Low phases*:
 - *Coding and Unit Test*: each module is *implemented using the chosen programming language*. Furthermore, each module is tested in isolation by the module developer. Also, the programs should include their documentation.
 - *Integration and System Test*: the modules are *integrated into* (sub)systems. The integrated (sub)systems are *tested*. Follows an incremental implementation scheme. A complete system test is needed to verify the overall properties. Note that sometimes we have alpha test and beta test.
-- *Deployment*: is the process used to conceive, specify, design, program, document, test, and bug fix to create and maintain applica-tions, frameworks, or other software components.
+- *Deployment*: is the process used to conceive, specify, design, program, document, test, and bug fix to create and maintain applications, frameworks, or other software components.
 - *Maintenance*: the maintenance is divided into *two types*:
   - Corrective deals with the repair of faults or defects found.
   - Evolution is also divided into three types:
@@ -165,7 +165,7 @@ There are several systems engineering methodologies required in High Performance
 - Produce documentation
 - Analyze, communicate, implement requirements
 
-== Interplat between the world and the machine
+== Interplant between the world and the machine
 For an ambulance dispatching system:
 - For every urgent call reporting an incident, an ambulance should arrive at the incident location within 14 mins
 - For every urgent call, details about the incident are correctly encoded
@@ -212,7 +212,7 @@ Using the example, we can identify the goal, the domain assumptions and the requ
   - When an ambulance is mobilized, it will reach the incident location in the shortest possible time.
   - Accurate ambulances' location are known by GPS.
   - Ambulance crews correctly signal ambulance availability through mobile data terminals on board of ambulances.
-- *Requirement*: When a call reporting a new incident is encoded, the Automated Dispatching Software should mobilize the nearest available ambu-lance according to information available from the ambulances' GPS and mobile data terminals.
+- *Requirement*: When a call reporting a new incident is encoded, the Automated Dispatching Software should mobilize the nearest available ambulance according to information available from the ambulances' GPS and mobile data terminals.
 
 #definition("Completeness of Requirements")[
   We say that $R$ is *complete* if and only if:
@@ -236,7 +236,7 @@ NFRs have some characteristics:
 - Have a *strong influence on the structure of the system to be built*. For example, a system may require 24/7 availability. As a result, it is likely to be designed as a replicated system (with redundant components).
 
 == Eliciting requirements
-The *Requirements Elicitation* is the practice of researching and discovering the requirements of a system from users, customers, and other stakeholders. The goal of *requirements elicitation* is to ensure that the software development process is based on a clear and comprehensive under-standing of the custome's needs and requirements. To do that, exist a simple and effective tool called *_scenarios_*.
+The *Requirements Elicitation* is the practice of researching and discovering the requirements of a system from users, customers, and other stakeholders. The goal of *requirements elicitation* is to ensure that the software development process is based on a clear and comprehensive under-standing of the customer's needs and requirements. To do that, exist a simple and effective tool called *_scenarios_*.
 
 #definition("Scenario")[
   A scenario is a concrete, focused, informal description of a single feature of the system to be.
@@ -322,7 +322,7 @@ In a Use Case Diagram, *relationships* play a crucial role in depicting the inte
 - *Use Case*: Transfer Funds
 - *Association*: A line connecting the "Customer" actor to the "Transfer Funds" use case, indicating the customer's involvement in the funds transfer process.
 
-#figure(image("figures/asscociation.jpg", width: 50%))
+#figure(image("figures/association.jpg", width: 50%))
 
 === Include Relationship
 The *_Include Relationship_* indicates that a use case includes the functionality of another use case. It is denoted by a dashed arrow pointing from the including use case to the included use case. This relationship promotes modular and reusable design.
@@ -779,8 +779,8 @@ Some examples of relevant technologies are: `Apache Kafka` and `RabbitMQ`.
   Kafka is a framework for the event-driven paradigm:
   - Includes primitives to create *event produces* and *consumers* and a runtime infrastructure to handle *event transfer* from producers to consumers.
   - *Stores events* durably and reliably.
-  - Allow consumers to process events as they occur or retrospectively.
-  These services are offered in a distributed, highly scalable, elastic, fault-tolerant, and secure manner.
+  - Allow *consumers* to process events as they occur or retrospectively.
+  These services are offered in a *distributed, highly scalable, elastic, fault-tolerant, and secure manner*.
 
   #figure(
     image("figures/Kafka-architecture.jpg", width: 70%),
