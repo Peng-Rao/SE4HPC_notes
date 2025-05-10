@@ -160,10 +160,10 @@ There are several systems engineering methodologies required in High Performance
 = Requirement Engineering
 == Definition
 *Requirement engineering* is the process of defining, documenting and maintaining requirements in the engineering design process. It is a critical part of software development and systems engineering. The questions derived from requirement engineering are:
-- Identify stakeholders
-- Identify their needs
-- Produce documentation
-- Analyze, communicate, implement requirements
+- *Identify stakeholders*
+- *Identify their needs*
+- *Produce documentation*
+- *Analyze, communicate, implement requirements*
 
 == Interplant between the world and the machine
 For an ambulance dispatching system:
@@ -228,7 +228,7 @@ Using the example, we can identify the goal, the domain assumptions and the requ
 The requirements can be of three types:
 - *Functional requirements*: describe the interactions between the system and its environment (independent from implementation). In other words, are the main (functional) goals the software has to realize.
 - *Non-functional requirements (NFRs)*: further characterization of user-visible aspects of the system not directly related to functions.
-- *Constraints requirements*: imposed by the customer or the environment in which the system operates.
+- *Constraints requirements* (or *technical requirements*): imposed by the customer or the environment in which the system operates.
 
 NFRs have some characteristics:
 - Constraints on *how functionality must be provided to the end user*
@@ -385,6 +385,14 @@ The Architecture is so *important* because it is the vehicle for communication: 
 Describe how the system is structured as a *set of elements* that have *runtime behavior* (components) and *interactions* (connectors).
 - The *components* are the principal units of computation (for example the clients, servers, services, etc.)
 - The *connectors* represent communication (for example request-response mechanisms, pipes, asynchronous messages, etc.)
+The purpose of these structures is to enable us to answer questions
+such as:
+- What are the major executing components and how do they interact at runtime?
+- What are the major shared data stores?
+- Which parts of the system are replicated?
+- How does data progress through the system?
+- Which parts of the system can run in parallel?
+- How does the system's structure evolve during execution?
 
 === Module structures
 Show how a system is structured as *a set of code or data units* that have to be procured or constructed, *together with their relations*. An example of modules: packages, classes, functions, libraries, layers, database tables, etc.
@@ -397,6 +405,11 @@ Define *how the elements* from component-and-connector or module structures *map
 == Software design descriptions and UML
 === Component Diagram (C&C structure)
 A *Component Diagram* breaks down the actual system under development into *various high levels of functionality*. Each component is responsible for one clear aim within the entire system and only interacts with other essential elements on a need-to-know basis.
+
+#figure(
+  image("figures/component-diagram.jpg", width: 80%),
+  caption: "Component Diagram",
+)
 
 Component-Based Diagrams in UML comprise several key elements, each serving a distinct role in illustrating the system's architecture. Here are the main components and their roles:
 
@@ -593,6 +606,30 @@ Creating a sequence diagram involves several steps, and it's typically done duri
 + *Add Annotations and Comments*: Include any additional information, annotations, or comments that provide context or clarification for elements in the diagram.
 + *Document Assumptions and Constraints*: If there are any assumptions or constraints related to the interaction, document them alongside the diagram.
 
+=== Class Diagram (Module structure)
+A *Class Diagram* is a *type of static structure* diagram that describes the structure of a system by showing the system's classes, their attributes, operations (or methods), and the relationships among objects.
+
+#figure(
+  image("figures/class-diagram.jpg", width: 80%),
+  caption: "Class Diagram",
+)
+
+=== Package Diagram (Module structure)
+A *Package Diagram*, a kind of structural diagram, shows the *arrangement and organization of model elements in middle to large scale project*. Package diagram can show both structure and dependencies between sub-systems or modules, showing different views of a system, for example, as multi-layered (aka multi-tiered) application --- multi-layered application model.
+
+#figure(
+  image("figures/package-diagram.jpg", width: 60%),
+  caption: "Package Diagram",
+)
+
+=== Deployment Diagram (allocation structure)
+A *Deployment Diagram* is a diagram that shows the configuration of runtime processing nodes and the components that live on them. Deployment diagrams is a kind of structure diagram used in modeling the physical aspects of an object-oriented system. They are often be used to model the static deployment view of a system (topology of the hardware).
+
+#figure(
+  image("figures/deployment-diagram.jpg", width: 80%),
+  caption: "Deployment Diagram",
+)
+
 == Design Principal
 === Divide and Conquer
 Divide and Conquer is a *problem-solving strategy* that involves breaking down a complex problem into smaller, more manageable parts, solving each part individually, and then combining the solutions to solve the original problem.
@@ -660,7 +697,7 @@ Be careful when you trust how others will try to use a component you are designi
 
 #pagebreak()
 
-= architectural Style
+= Architectural Style
 An architectural style determines the vocabulary of components and connectors that can be used in instances of that style, together with a set of constraints on how they can be combined.
 
 == Client-Server
@@ -682,6 +719,7 @@ There are two important guiding principles for interface design: *information hi
 - *Contract principle*: any resource (operation, data) added to an interface implies a commitment to maintaining it.
 - *Least surprise principle*: interfaces should behave consistently with expectations.
 - *Small interfaces principle*: interfaces should limit the exposed resources to the minimum.
+
 There are also some important elements to define: *interaction style* (e.g. sockets, RPC, REST); representation and *structure of exchanged data* (affecting expressiveness, interoperability, performance and transparency); *error handling*.
 
 === Error handling, multiple interfaces and interface evolution
@@ -748,9 +786,8 @@ The chief benefit of three-tier architecture is its logical and physical separat
 == Microservice architectural style
 The microservice architectural style is an approach to developing a single application as a suite of *small services*, each running in its own process and communicating *lightweight mechanisms*, often an HTTP resource API.
 
-=== Benefits
 There are two main benefits:
-- *Technology heterogeneity*. *Each service uses its own technology stack*. The technology stack can be selected to fit the task best (e.g. data analysis vs video streaming). The teams can experiment with new technologies within a single microservice (e.g. we can deploy two versions and do A/B testing). Also, no unnecessary dependencies or libraries for each service.
+- *Technology heterogeneity.* *Each service uses its own technology stack*. The technology stack can be selected to fit the task best (e.g. data analysis vs video streaming). The teams can experiment with new technologies within a single microservice (e.g. we can deploy two versions and do A/B testing). Also, no unnecessary dependencies or libraries for each service.
 - *Scaling. Each microservice can be scaled independently*. Also, identified bottlenecks can be addressed directly. Parts of the system that do not represent bottlenecks can remain simple and unscaled.
 
 == Event-Driven Architecture
@@ -775,15 +812,61 @@ Other characteristics of this architecture:
 
 Some examples of relevant technologies are: `Apache Kafka` and `RabbitMQ`.
 
-#example("Apache Kafka")[
-  Kafka is a framework for the event-driven paradigm:
-  - Includes primitives to create *event produces* and *consumers* and a runtime infrastructure to handle *event transfer* from producers to consumers.
-  - *Stores events* durably and reliably.
-  - Allow *consumers* to process events as they occur or retrospectively.
-  These services are offered in a *distributed, highly scalable, elastic, fault-tolerant, and secure manner*.
+=== Apache Kafka Architecture
+Kafka is a framework for the event-driven paradigm:
+- Includes primitives to create *event produces* and *consumers* and a runtime infrastructure to handle *event transfer* from producers to consumers.
+- *Stores events* durably and reliably.
+- Allow *consumers* to process events as they occur or retrospectively.
+These services are offered in a *distributed, highly scalable, elastic, fault-tolerant, and secure manner*.
 
-  #figure(
-    image("figures/Kafka-architecture.jpg", width: 70%),
-    caption: [ Kafka architecture (the ZooKeeper is a "health manager") ],
-  )
-]
+#figure(
+  image("figures/Kafka-architecture.jpg", width: 70%),
+  caption: [ Kafka architecture (the ZooKeeper is a "health manager") ],
+)
+
+
+Some important features:
+- Each *broker* handles a set of *topics* and *topic partitions*, parts including sets of messages on the topic.
+- The partitions are independent from each other and can be *replicated* on multiple brokers for fault tolerance.
+- There is one *leading broker* per partition. The other brokers containing the same partition are followers.
+- The *producers* know the available leading brokers and send messages to them.
+- Messages in the same topic are organized *in batches* at the producers'side and then sent to the broker when the batch size overcomes a certain threshold.
+- Consumers adopt a *pull approach*. They receive in a single batch all messages belonging to a certain partition starting from a specified offset.
+- Messages remain available at the brokers' side *for a specified period* and can be *read multiple times* in this period.
+- The leader keeps track of the *in-synch followers*.
+- *ZooKeeper is used to monitor the correct operation of the cluster.* All brokers send heartbeats to ZooKeeper. ZooKeeper will replace a failed broker by electing a new leader for all partitions that the failed broker was leading. It can also start/restart brokers.
+
+==== Producer
++ Brokers commit messages by storing them in the corresponding partition;
++ Leader adds the message to followers (replicas) if available.
+
+#figure(
+  image("figures/sequence-diagram-kafka-producer.jpg", width: 70%),
+  caption: [ Sequence diagram of a producer sending a message to a Kafka broker ],
+)
+
+A possible *issue*: in case of failure, the producer may not get the response (message number 7 in figure). In this case, the producer has to resend the message and kafka brokers can identify and eliminate duplicates.
+
+Synchronization with replicas can be transactional and it's possible to choose between the following options:
+- *Exactly-once* semantics is possible but long waiting time. So *replicas are not allowed*, but the problem is that Kafka spent a long time trying to guarantee uniqueness.
+- *At-least-once* can be chosen by excluding duplicates' management.
+- *At-most-once* can be chosen by publishing messages asynchronously.
+
+==== Consumer
+Each consumer can rely on a persistent log to keep track of the offset so that it is not lost in case of failure.
+
+*Issue case*: if the consumer fails after having elaborated messages and before storing the new offset in the log, the same messages will be retrieved again (*at-least-once semantics*). Note that the delivery semantics can be changed if the new offset is store before the elaboration and we can choose *at-most-once semantics* because, if failing after storing the offset, the effect of the received messages does not materialize. Finally, transactional management of the log also allows *exactly-once semantics*.
+
+#figure(
+  image("figures/sequence-diagram-kafka-consumer.jpg", width: 70%),
+  caption: [ Sequence diagram of a consumer reading messages from a Kafka broker ],
+)
+
+=== Kafka architectural tactics
+There are some tactics used to improve some features of Kafka. In the following section we can see scalability and fault tolerance.
+
+==== Improve Scalability
+By *creating multiple partitions and multiple brokers*, we can create the ability to distribute producers/consumers to different partitions handled by different brokers. We can also *scale the operations* because Kafka supports the *creation of clusters of brokers*. Consider that each cluster contains up to a hundred brokers capable of handling trillions of messages per day.
+
+==== Improve Fault Tolerance
+By *creating partitions*, we use the *persistence* of the partitions. Replication also reduces the risk of data loss. Finally, cluster management takes care of restarting brokers and setting leaders as needed.
