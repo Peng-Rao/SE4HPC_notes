@@ -870,3 +870,106 @@ By *creating multiple partitions and multiple brokers*, we can create the abilit
 
 ==== Improve Fault Tolerance
 By *creating partitions*, we use the *persistence* of the partitions. Replication also reduces the risk of data loss. Finally, cluster management takes care of restarting brokers and setting leaders as needed.
+
+== Data-Intensive applications
+Before we introduce the architectural styles for data-intensive applications, we explain the difference between *batch and stream processing*.
+
+*Batch processing* is a method of running software programs called jobs in batches automatically. While users are required to submit the jobs, no other interaction by the user is required to process the batch.
+
+*Stream processing* (also known as event stream processing, data stream processing, or distributed stream processing) is a programming paradigm which views streams, or sequences of events in time, as the central input and output objects of computation.
+
+#table(
+  columns: 2,
+  [*Batch*], [*Stream*],
+  [Has access to all data.], [Computes a function of one data element, or a smallish window of recent data.],
+  [Might compute something big and complex.], [Computes something relatively sim-ple.],
+  [Is generally more concerned with throughput than latency of individual components of the computation.],
+  [Needs to complete each computation in near-real-time --- probably seconds at most.],
+
+  [Has latency measured in minutes or more.], [Computations are generally independent.],
+  [],
+  [Asynchronous --- source of data doesn't interact with the stream processing directly, like by waiting for an answer.],
+)
+
+=== Batch approach: MapReduce
+*MapReduce* is a *programming architecture* and an associated implementation for processing and generating big data sets with a parallel, distributed algorithm on a cluster.
+
+A MapReduce is composed of a *map procedure*, which performs filtering and sorting (such as sorting students by first name into queues, one queue for each name), and a *reduce method*, which performs a summary operation (such as counting the number of students in each queue, yielding name frequencies). The "MapReduce System" (also called "infrastructure" or "framework") orchestrates the processing by marshalling the distributed servers, running the various tasks in parallel, managing all communications and data transfers between the various parts of the system, and providing for redundancy and fault tolerance.
+
+#example("an example of a batch approach using MapReduce")[
+  #figure(image("figures/mapreduce-example.jpg", width: 70%))
+
+  The workflow is the following:
+  + Read a set of input files and break it into records;
+  + Call the *map* function. It extracts a key and a value from each record (the assigned value is application-dependent);
+  + Sort all the key-value pairs by key;
+  + Call the reduce function. It iterates over the ordered sets of key-value pairs and combines the values (the combination logic is application-dependent)
+]
+
+#figure(
+  image("figures/mapreduce-architecture.jpg", width: 70%),
+  caption: [ MapReduce architecture ],
+)
+
+==== Advantages
+- Works well on *commodity hardware*: *Commodity hardware* in computing is computers or components that are readily available, inexpensive and easily interchangeable with other *commodity hardware*. Almost all PCs use *commodity hardware*.
+
+==== Disadvantages
+- Implementing a complex processing job is not simple (high level programming model have been built on top of it);
+- Reducers have to wait until the preceding Mappers have concluded their job;
+- Materialization of intermediate states can be overkilling;
+- Sometimes it is not necessary to sort the results of mappers;
+- New batch computation approaches supported by frameworks as Spark, Tez, Flink, etc.
+
+=== Stream approach: Apache Storm
+*Apache Storm* is a *distributed stream processing computation framework* written predominantly in the Clojure programming language. Originally created by Nathan Marz and team at BackType, the project was open sourced after being acquired by Twitter. It uses custom created “spouts” and “bolts” to define information sources and manipulations to allow batch, distributed pro-cessing of streaming data.
+
+Some features:
+- Support stream processing.
+- More than 1 million messages per second per node.
+- Can scale up to thousands of nodes per cluster.
+- Expects and manages failures (fully fault tolerant).
+- Provides guaranteed message delivery with exactly once semantics (reliable).
+
+A Storm application is designed as a "topology" in the shape of a* directed acyclic graph (DAG)* with *spouts* (source of streams) and *bolts* (receives messages) acting as the graph vertices. *Edges on the graph are named streams* and direct data from one node to another. Together, the topology acts as a data transformation pipeline. At a superficial level the general topology structure is similar to a MapReduce job, with the main difference being that data is processed in real time as opposed to in individual batches. Additionally, Storm topologies run indefinitely until killed, while a MapReduce job DAG must eventually end.
+
+#table(
+  columns: 2,
+  [*Stream Grouping*], [*Description*],
+  [*Shuffle*], [Sends messages to bolts in random, round robin sequence. Use for atomic operations, such as math.],
+  [*Fields*],
+  [Sends messages to a bolt based on one or more fields in the tuple. Used to segment an incoming stream and to count tuples of a specified type with a specified value.],
+
+  [*All*],
+  [Sends a single copy of each message to all instances of a receiving bolt. Use to send a signal, such as clear cache or refresh state, to all bolts.],
+
+  [*Custom*],
+  [Customized processing sequence. Use to get maximum flexibility of topology processing based on factors such as data types, load, and seasonality.],
+
+  [*Direct*], [Source decides which bolt receives a message.],
+  [*Global*],
+  [Sends messages generated by all instances of a source to a single target instance. Use for global counting operations.],
+)
+
+#example("example of topology with different groupings")[
+  #figure(image("figures/example-topology.jpg", width: 70%))
+]
+
+=== Combining batch and stream: Lambda Architecture
+*Lambda architecture* is a *data-processing architecture* designed to handle massive quantities of data by taking advantage of both batch and stream-processing methods.
+
+This approach to architecture attempts to balance latency, throughput, and fault-tolerance by using batch processing to provide comprehensive and accurate views of batch data, while simultaneously using real-time stream processing to provide views of online data. The two view outputs may be joined before presentation.
+
+The rise of lambda architecture is correlated with the growth of big data, real-time analytics, and the drive to *mitigate the latencies of map-reduce*.
+
+#figure(
+  image("figures/lambda-architecture.jpg", width: 80%),
+  caption: [ Lambda architecture ],
+)
+
+Exist also *Kappa architecture*. Kappa architecture is a software architecture used for processing streaming data with a single technology stack. It is a simplification of Lambda architecture, where the data is processed in batches. Kappa architecture ingests data into a messaging system like Apache Kafka, and performs both real-time and batch processing, especially for analytics, on the same stream. It allows for recomputation on the data by streaming it through the pipeline again.
+
+#figure(
+  image("figures/kappa-architecture.jpg", width: 80%),
+  caption: [ Kappa architecture ],
+)
