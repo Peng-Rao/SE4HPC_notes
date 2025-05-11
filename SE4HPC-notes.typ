@@ -973,3 +973,49 @@ Exist also *Kappa architecture*. Kappa architecture is a software architecture u
   image("figures/kappa-architecture.jpg", width: 80%),
   caption: [ Kappa architecture ],
 )
+
+#pagebreak()
+
+= Verification and Validation
+== Terminology
+There are some differences between the terms *verification* and *validation*.
+
+First of all, the *verification* is internal, while the *validation* is external. Assuming an abstract process with the following levels:
+
+#figure(image("figures/VV-terminology.jpg", width: 80%))
+
+The verification is intended as: "Is level $i$ consistent with level $i + 1$?”. It's an internal consistency check. The validation is: "Does level i conform to needs?". It's an external consistency check.
+
+Another fundamental topic when we speak about verification and validation is *Quality Assurance* (QA). It *defines the policies and processes to achieve quality*. So it can *judge the quality and find defects*.
+
+A direct *consequence* of the QA is the improvement of the quality. With the term "quality", we refer to an ideal absence of defects (impossible) and an absence of other issues that prevent the fulfillment of non-functional requirements or the degradation of some software qualities.
+
+Since it is impossible to have zero defects, a *periodic quality assurance evaluation is critical*. Ideally, every artifact shall be the subject of QA; even the verification artifact must be verified!
+
+The V-model is a *graphical representation of a systems development lifecycle*. It is used to produce rigorous development lifecycle models and project management models. It describes the activities and the results that must be made during product development.
+
+#figure(
+  image("figures/V-model.jpg", width: 80%),
+  caption: [ V-model ],
+)
+
+The _left side_ of the "V" represents the decomposition of requirements and the creation of system specifications. The _right side_ of the "V" represents an integration of parts and their validation.
+
+We have presented the V-model to help you understand where the verification can be placed. Now, the *verification* is concerned with the code and the architecture. Considering the *software* side, it has two possible approaches:
+- *Static Analysis*. It is done using source code or other software artifacts but without execution. Note that the analysis is static, but the properties are dynamic.
+- *Dynamic Analysis (Testing).* It is done by executing the sources. The analysis is made by comparing the actual behavior and the expected one.
+
+On the other hand, to verify the architectural level, it is necessary to consider some aspects:
+- The *structure must be consistent*. Some examples:
+  - For every required interface, a corresponding provided interface exists.
+  - Sequence diagrams are consistent with component diagrams and with the defined interfaces.
+  - Each component has one or more modules that implement it.
+- All *functional requirements must have the possibility to be satisfied*. Some examples:
+  - Each requirement is mapped on one or more components.
+  - Each use case event flow is detailed in terms of one or more sequence diagrams.
+- *Concurrent use of resources must be correctly defined.* Problems like order violation or a deadlock are expected. Some techniques must be applied to analyze these problems.
+- *Non-functional requirements must have the possibility to be fulfilled*.
+
+#definition("DevOps")[
+  DevOps is a *set of practices, tools, and a cultural philosophy that automate and integrate the processes between software development and IT teams*. It emphasizes team empowerment, cross-team communication and collaboration, and technology automation.
+]
