@@ -1217,3 +1217,43 @@ $
   - Component 2 has $99%$ (2-nines) of Availability and 3.65 days/year of downtime.
   Despite the previous example, the combined availability is $99.99%$ (4-nines) with 52 minutes/year of downtime.
 ]
+
+=== Tactics for Availability
+As we explained in the past pages, Availability is crucial, but it's also fundamental to use intelligent tactics to improve the quality of the attributes.
+
+#definition("Tactics")[
+  The *Tactics* are design decisions that influence the control of one or more quality attributes.
+]
+
+Some well-known tactics are:
+
+==== Replication approaches
+The *Replication* is very simple to manage in the case of stateless components. The approaches are different:
++ *Hot spare*: One component leads, and another is always ready to take over. In the following example, C1 leads, C2 is always ready to take over. #figure(
+    image("figures/hot-spare.jpg", width: 50%),
+  )
++ *Warm spare*: One component leads and periodically updates another component. If the primary component fails, the second component takes time to update itself fully. C1 is leading and periodically updating C2. If C1 fails, some time might be needed to fully update C2. #figure(
+    image("figures/warm-spare.jpg", width: 50%),
+  )
++ *Cold spare*: A second component is dormant, started, and updated only if required. In the following example, C2 is dormant, started, and updated only if required. #figure(
+    image("figures/cold-spare.jpg", width: 50%),
+  )
++ *Triple modular redundancy*: Three components are always active, and the result is the one produced by the majority. This is good when reliability is also important. In the following example, C1, C2, and C3 are all active. The result is the one produced by the majority. #figure(
+    image("figures/triple-redundancy.jpg", width: 50%),
+  )
+
+==== Forward error recovery
+*Forward Error Recovery* is a *tactic* in which a recovery mechanism moves the failed component to a degraded state. In a degraded state, a component continues to be available even if it is not fully functional. Here is an example:
+
+#figure(image("figures/forward-error-recovery.jpg", width: 70%))
+
+==== Circuit breaker
+The *Circuit Breaker (CB)* tactic is a client-side resiliency pattern. The CB acts as a proxy for a remote component:
++ A component is called;
++ The CB monitors the call.
+But note that there should be possible failures:
+- CB receives an error;
+- The call takes "too long" (CB kills the call).
+If there are too many failures, the circuit breaker inhibits future calls by moving to the open state.
+
+#figure(image("figures/circuit-breaker.jpg", width: 70%))
