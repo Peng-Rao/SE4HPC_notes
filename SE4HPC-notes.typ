@@ -1019,3 +1019,115 @@ On the other hand, to verify the architectural level, it is necessary to conside
 #definition("DevOps")[
   DevOps is a *set of practices, tools, and a cultural philosophy that automate and integrate the processes between software development and IT teams*. It emphasizes team empowerment, cross-team communication and collaboration, and technology automation.
 ]
+
+== Petri Net
+It is necessary to model distributed systems to study the concurrent use of resources at the architectural level.
+
+A *Petri Net (PT Net or P/T Net)*, a place/transition net (PT net), is one of several mathematical modelling languages used to describe distributed systems. Like industry standards such as UML activity diagrams, *Petri nets offer a graphical notation for stepwise processes* that include choice, iteration, and concurrent execution.
+
+The Petri net uses a graphic tool. It is a bipartite-directed graph containing places (circles), transitions (bars), and directed arcs.
+
+#figure(
+  image("figures/Petri-net-graphic.jpg", width: 80%),
+  caption: [ Petri net graphic ],
+)
+
+A Petri net is a four-tuple:
+$
+  P N =<P, T, I, O>
+$
+- $P$: a *finite set of places* ${p_1, p_2, dots, p_n}$
+- $T$: a *finite set of transitions* ${t_1, t_2, dots, t_s}$
+- $I$: an *input function* $I: T times P arrow.long {0, 1}$
+- $O$: an *output function* $O: T times P arrow.long {0, 1}$
+It's also possible to add another term called $M^0$, which is an initial marking $P arrow.long N$:
+$
+  P N = < P, T, I, O, M^0 >
+$
+Formula called also *marked Petri net*.
+
+#example("An example of a Petri net")[
+  #figure(image("figures/Petri-net-example.jpg", width: 60%))
+  - $P = {p_1, p_2, p_3}$
+  - $T = {t_1, t_2, t_3}$
+  - $I = mat(1, 0, 0; 0, 1, 0; 0, 0, 1), O = mat(0, 1, 0; 0, 0, 1; 1, 0, 0)$
+  - $M^0=(1, 0, 0)$
+  Note:
+  - $p_1$ is the input place of transition $t_1$
+  - $p_2$ is the output place of transition $t_1$
+]
+
+Some observations of the Petri net:
+- In a given marking $M$, a transition $t$ can fire only if it is enabled.
+- An enabled transition not necessarily fires.
+- More than one transition can be enabled in a marking.
+- If two transitions are enabled at the same time:
+  - Which one fires first is not determined;
+  - Petri nets are an intrinsically nondeterministic model;
+  - The firing of a transition might disabled another enabled transition.
+
+=== Dynamics
+*Enabling Rule*: A transition $t$ is enabled if every input place contains at least one token.
+\
+*Firing Rule*: Firing an enabled transition
+- removes one token from each input place of the transition
+- adds one token to each output place of the transition
+
+#figure(image("figures/dynamics.jpg", width: 80%))
+
+=== Basic Constructs
+==== Sequential Actions
+Each action is a transition.
+
+#figure(image("figures/sequential-actions.jpg", width: 70%))
+
+==== Dependency
+A transition requires two inputs.
+
+#figure(image("figures/dependency.jpg", width: 40%))
+
+==== Conflict Construct
+Only one of the two transitions can fire.
+
+#figure(image("figures/conflict-construct.jpg", width: 40%))
+
+==== Concurrency Construct
+These two sequences can occur simultaneously.
+
+#figure(image("figures/concurrency-construct.jpg", width: 70%))
+
+==== Synchronization
+Machine can process one part at once.
+
+#figure(image("figures/synchronization.jpg", width: 60%))
+
+==== Resource Sharing
+One worker for two machines. The worker can work at one machine at a time.
+
+#figure(image("figures/resource-sharing.jpg", width: 60%))
+
+==== Buffer (Queue)
+The buffer can hold a limited number of parts.
+
+#figure(image("figures/buffer.jpg", width: 60%))
+
+#figure(
+  image("figures/petri-net-example-1.jpg", width: 60%),
+  caption: [ Example of Petri nets of producer-consumer model with unbounded buffer. ],
+)
+
+#figure(
+  image("figures/petri-net-example-2.jpg", width: 60%),
+  caption: [
+    Example of Petri nets of producer-consumer model with finite buffer with a parametric number of positions.
+  ],
+)
+
+#figure(
+  image("figures/petri-net-example-3.jpg"),
+  caption: [
+    Example of Petri nets of deadlock.
+  ],
+)
+
+== Quantitative impact of architectural decisions
