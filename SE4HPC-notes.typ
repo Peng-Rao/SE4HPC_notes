@@ -1131,3 +1131,89 @@ The buffer can hold a limited number of parts.
 )
 
 == Quantitative impact of architectural decisions
+Architectural choices directly influence several software qualities (e.g., scalability, reliability, availability, usability).
+
+To cope with this, we need metrics to quantify qualities and specific methodologies to analyze the quantitative impact of architectural choices on these qualities. The tactics are also foundational to address the issues.
+
+First, before discussing how to evaluate the quantitative impact of architectural decisions, we must introduce the availability concept and explain a system life-cycle to introduce some exciting *metrics*.
+
+In general, a *service shall be continuously available* to the user, and if it fails after a bit of downtime, it should be a *rapid service recovery*. So the availability of a service depends on:
+- The *complexity* of the *infrastructure* architecture.
+- *Reliability* of the individual components.
+- *Ability to respond* quickly and effectively to faults.
+- *Quality of the maintenance* by support organizations and suppliers.
+- *Quality* and scope of the *operational management* processes.
+
+=== System Life-Cycle
+The System Life-Cycle relates to failures in the following way:
+
+#figure(
+  image("figures/system-life-cycle.jpg", width: 80%),
+  caption: [ The System Life-Cycle when faults occur. ],
+)
+- *Time of occurrence*. Time at which the user becomes aware of the failure.
+- *Detection time*. Time at which operators become aware of the failure.
+- *Response time*. Time required by operators to diagnose the issue and respond to users.
+- *Repair time*. Time required to fix the service/components that caused the failure.
+- *Recovery time*. Time required to restore the system (re-configuration, re-initialization, ...).
+- *Mean Time to Repair (MTTR)*. Average time between the occurrence of a failure and service recovery, also known as the _downtime_.
+- *Mean Time to Failures (MTTF)*. Mean time between the recovery from one failure and the occurrence of the next failure, also known as _uptime_.
+- *Mean Time Between Failures (MTBF)*. Mean time between the occurrences of two consecutive failures.
+
+#definition("Availability Metric")[
+  The *availability metric* is the probability that a component works correctly at time $t$. As a mathematician term, we can express this definition as the relationship between the Mean Time to Failures (MTTF) and the MTTF plus the Mean Time to Repair (MTTR):
+  $
+    A = "MTTF" / ("MTTF" + "MTTR")
+  $
+  Note that if the Mean Time to Repair (MTTR) is small, then the Mean Time Between Failures (MTBF) is approximately equal to the Mean Time to Failures(MTTF): $"MTBF" approx.eq "MTTF"$
+]
+
+Availability is typically specified in "*nines notation*". For example, 3-nines availability corresponds to $99.9%$, 5-nines availability corresponds to $99.999%$ availability.
+
+#align(center)[
+  #table(
+    columns: 2,
+    table.header(
+      [*Availability*],
+      [*Downtime per year*],
+    ),
+
+    [90% (1-nine)], [36.5 days/year],
+    [99% (2-nines)], [3.65 days/year],
+    [99.9% (3-nines)], [8.76 hours/year],
+    [99.99% (4-nines)], [52 minutes/year],
+    [99.999% (5-nines)], [5 minutes/year],
+  )
+]
+
+=== Methodology
+The Analysis Methodology depends on the system. The Availability is calculated by *modelling the system* as an interconnection of elements in series and parallel:
+- *Elements operating in #underline[series]* mean that if one element fails, the whole combination fails.
+- *Elements operating in #underline[parallel]* mean that if a component fails, the other elements take over the operations of the failed element.
+
+==== Availability in series
+The combined system is *operational only if every part is available*. Then, the combined Availability is the product of the parts' Availability.
+$
+  A = Pi_(i=1)^n A_i
+$
+
+#example("Example of availability in series")[
+  We assume there is a system composed of two components with the following availability and downtime:
+  - Component 1 has $99%$ (2-nines) of availability and 3.65 days/year of downtime.
+  - Component 2 has $99.999%$ (5-nines) of availability and 5 minutes/year of downtime.
+  So the combined availability is $98.999%$ with 3.65 days/year of downtime.
+  This result means that a chain is as strong as the weakest link.
+]
+
+==== Availability in parallel
+The combined system is operational if at least one part is available. Then, the combined Availability is $1 - P$, where $P$ indicates all parts that a re not available.
+$
+  P = Pi_(i=1)^n (1 - A_i)
+$
+
+#example("Example of availability in parallel")[
+  We assume there is a system composed by two components with the following Availability and downtime:
+  - Component 1 has $99%$ (2-nines) of Availability and 3.65 days/year of downtime.
+  - Component 2 has $99%$ (2-nines) of Availability and 3.65 days/year of downtime.
+  Despite the previous example, the combined availability is $99.99%$ (4-nines) with 52 minutes/year of downtime.
+]
