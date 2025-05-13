@@ -1257,3 +1257,98 @@ But note that there should be possible failures:
 If there are too many failures, the circuit breaker inhibits future calls by moving to the open state.
 
 #figure(image("figures/circuit-breaker.jpg", width: 70%))
+
+== Static Analysis
+*Static Analysis* analyzes the source code, and each analyzer targets a fixed set of hard-coded (pre-defined, not custom) properties. It is entirely automatic, and the output reports two types of results: *safe (no issues)* and *unsafe (potential problems)*. Also, the analysis is made on generic (or symbolic) inputs.
+
+The properties that we have mentioned are safety properties, such as:
+- No overflow for integer variables
+- No type errors
+- No null-pointer dereferencing
+- No out-of-bound array accesses
+- No race conditions
+- No useless assignments
+- No usage of undefined variables
+- No execution of specific paths
+
+Using the static analysis, we can use the symbolic execution.
+
+#definition("Symbolic Execution")[
+  The *symbolic execution* is a technique to analyze the program by executing it with symbolic inputs instead of concrete values. The symbolic execution engine generates a set of constraints that must be satisfied for the program to reach a specific state.
+]
+
+The symbolic execution analyzes actual source code and reachability and path feasibility properties. It is automatic and may fail to explore all possible paths. Sometimes, it is used to support testing.
+
+The checked properties by the static analysis can be of different types:
+- *Reachability*. Does some program execution reach location L (generic line of code) in S (source code)? With the reachability property, the symbolic execution tries:
+  - To verify that L cannot be reached;
+  - Or spots the condition under which L can be reached.
+  For example, in the following code:
+```
+k:    try {
+k+1:       ...
+L-1:      } catch (e) {
+L:          /* error */
+... }
+```
+Static analysis checks the reachability properties and verifies that $L$ cannot be reached, or discovers the condition under which $L$ can be reached.
+- Path Feasibility. Is the given path $p$ feasible? With the path feasibility property, the symbolic execution tries:
+  - To verify that $p$ cannot be executed;
+  - Or *spots the condition under which p can be executed*.
+  The $p$ will be
+  $
+    p =<0,1, dots, k, dots, n>
+  $
+Symbolic execution *executes programs on symbolic values*. Each symbolic value has its *symbolic states*, which keep track of the variables' (symbolic) values. The inputs are initialized with symbolic (generic) values.
+
+=== Example
+First we introduce the annotation, inputs are initialized with symbolic (generic) values:
+```
+void foo(int x, int y) {
+  ...
+```
+#figure(image("figures/example-symbolic-execution-1.jpg", width: 70%))
+We introduce a local variable:
+```
+void foo ( int x , int y) {
+  int z := x
+```
+#figure(image("figures/example-symbolic-execution-2.jpg", width: 70%))
+We introduce a condition. A path condition $pi$ represents a constraint on a path:
+```
+void foo ( int x , int y) {
+  int z := x
+  if (z < y)
+```
+- If condition is true
+#figure(image("figures/example-symbolic-execution-3.jpg", width: 70%))
+- If condition is false
+#figure(image("figures/example-symbolic-execution-4.jpg", width: 70%))
+
+Execution continues along feasible paths. In this case, the path condition $pi$ is satisfiable:
+```
+void foo ( int x , int y) {
+  int z := x
+  if (z < y)
+    z := z *2
+```
+#figure(image("figures/example-symbolic-execution-5.jpg", width: 70%))
+Another if condition:
+```
+void foo ( int x , int y) {
+  int z := x
+  if (z < y)
+    z := z *2
+  if (x < y && z >= y )
+```
+- If condition is true
+#figure(image("figures/example-symbolic-execution-6.jpg", width: 70%))
+- If condition is false
+#figure(image("figures/example-symbolic-execution-7.jpg", width: 70%))
+Possible outcomes of symbolic execution:
+- Satisfiable exit ($pi$ is satisfiable): every satisfying assignment to variables in $pi$ is an input that satisfies the given property in a *concrete execution*.
+#figure(image("figures/example-symbolic-execution-8.jpg", width: 70%))
+- Unsatisfiable exit ($pi$ is unsatisfiable): the given property cannot be satisfied by any *concrete execution*.
+#figure(image("figures/example-symbolic-execution-9.jpg", width: 70%))
+Finally, we can draw the *Execution Tree*. The execution paths can be collected in an execution tree, where end states are marked as `SAT` or `UNSAT`.
+#figure(image("figures/example-symbolic-execution-10.jpg", width: 70%))
