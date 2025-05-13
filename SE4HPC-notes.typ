@@ -1352,3 +1352,8 @@ Possible outcomes of symbolic execution:
 #figure(image("figures/example-symbolic-execution-9.jpg", width: 70%))
 Finally, we can draw the *Execution Tree*. The execution paths can be collected in an execution tree, where end states are marked as `SAT` or `UNSAT`.
 #figure(image("figures/example-symbolic-execution-10.jpg", width: 70%))
+
+=== Limitations
+- The *path conditions may be too complex for constraint solvers*. Because solvers are very good at checking linear constraints, but it is harder for them to reason about non-linear arithmetic, bit-wise operations, string manipulation, etc.
+- It is *impossible* or *difficult to use when the number of paths to be explored is infinite* or *huge*. For example, unbounded loops give rise to infinite sets of paths. Although the set of paths is finite, checking all loops is expensive and impractical.
+- Finally, there may be *external code*. Then the sources are not available, such as a precompiled library, or the behavior is unknown to the solver.
