@@ -1357,3 +1357,117 @@ Finally, we can draw the *Execution Tree*. The execution paths can be collected 
 - The *path conditions may be too complex for constraint solvers*. Because solvers are very good at checking linear constraints, but it is harder for them to reason about non-linear arithmetic, bit-wise operations, string manipulation, etc.
 - It is *impossible* or *difficult to use when the number of paths to be explored is infinite* or *huge*. For example, unbounded loops give rise to infinite sets of paths. Although the set of paths is finite, checking all loops is expensive and impractical.
 - Finally, there may be *external code*. Then the sources are not available, such as a precompiled library, or the behavior is unknown to the solver.
+
+#pagebreak()
+
+= Testing
+*Testing* (dynamic analysis) is an approach to verification. The *main goal of testing is to make programs fail*. Other common goals are:
+- Exercise different parts of a program to increase coverage;
+- Make sure the interaction between components works (integration testing);
+- Support *fault localization* and *error removal* (debugging);
+- Ensure that *bugs introduced in the past do not happen again *(regression testing).
+Program testing can be used to show the presence of bugs, but never to show their absence!
+
+== Debugging
+*Debugging* is a systematic approach to *fault localization and error removal*. The output is often used to support debugging.
+
+#figure(image("figures/debugging.jpg", width: 70%))
+== Test case
+#definition("Test case")[
+  A *Test Case* is a set of inputs, *execution conditions*, and a *pass/fail criterion*.
+]
+Running a test case typically involves setup, execution and teardown.
+- Setup. Bring the program to an initial state that fulfils the execution conditions.
+- Execution. Run the program on the actual inputs.
+- Teardown. Record the output, the final state, and any failure determined based on the pass/fail criterion.
+
+A test set, or test suite, can include multiple test cases. Finally, a *Test Case Specification* is a requirement to be satisfied by one or more test cases.
+
+== Unit Testing
+When discussing test cases, it's necessary to introduce *Unit Testing*. This is conducted by developers and aims to test small pieces (units) of code in isolation. However, when we test in isolation, there should be a problem: the units may depend on other units. Then, we need to simulate missing units.
+
+The *Integration Testing* (integration of the unit tests) aims to exercise the interaction between *interfaces and components*. The faults discovered by integration testing are multiple; some examples:
+- Inconsistent interpretation of parameters (e.g. mixed units meters or yards)
+- Violations of assumptions about domains (e.g. buffer overflow)
+- Side effects on parameters or resources (e.g. conflict on temporary file)
+- Nonfunctional properties (e.g. unanticipated performance issues)
+- Concurrency-specific problems
+
+Typically, the integration test is defined by the Design Document. In the Design Document, we can find two types of plans:
+- Build Plan that establishes the order of the implementation;
+- A Test Plan that defines how to carry out integration testing is needed.
+
+== Integration testing: strategies
+=== Big Bang
+Test only after integrating all modules together (not even a real strategy).
+\
+*Pros*: Does not require stubs, requires less drivers/oracles
+\
+*Cons*:
+- Minimum observability, fault localization/diagnosability, efficacy, feedback
+- High cost of repair
+
+=== Iterative and incremental strategies
+The main action is run after components are released (not just at the end). The strategy can be done in three different ways:
+
+==== Hierarchical
+Based on the hierarchical structure of the system. It can be done *top-down* or *bottom-up*.
+
+*Top-down strategy*. Work from the top level (in terms of "use" or "include" relationship) down to the bottom level. As modules are completed (according to the building plan), more functionality is testable. We also need to replace some stubs, and we need other stubs for lower levels. *When all modules are incorporated, the whole functionality can be tested.* *Pros*: The drivers use the top level interfaces (e.g. REST APIs). *Cons*: This strategy requires stubs of used modules at each step of the process.
+
+#figure(
+  image("figures/example-top-down.jpg", width: 70%),
+  caption: [ Example of top-down strategy ],
+)
+
+*Bottom-up strategy*. Starting from the leaves of the "uses" hierarchy. *Pros*: An advantage is that it doesn't require stubs. *Cons*: Typically requires more drivers (one for each module, as in unit testing). Another thing to consider is that it may create several work-ing subsystems, and each working subsystem will eventually be integrated into the final one.
+
+#figure(
+  image("figures/example-bottom-up.jpg", width: 70%),
+  caption: [ Example of bottom-up strategy ],
+)
+
+*Threads*. A thread is a part of several modules that together provide a user-visible programme function. By using the thread strategy we can have some advantages.
+\
+*Pros*:
+- We can maximize the progress visible to the user (or other stakeholders);
+- Reduce drivers and stubs;
+- An integration plan is usually more complex.
+
+#figure(
+  image("figures/example-thread.jpg", width: 70%),
+  caption: [ Example of thread strategy ],
+)
+
+*Critical*. The critical modules strategy starts with the highest risk modules. Risk assessment is a necessary first step. *The key point of this strategy is the risk-oriented process*. Integration and testing as a risk mitigation activity, designed to deliver any bad news as early as possible.
+
+#figure(
+  image("figures/summary-integration-test-strategies.jpg", width: 80%),
+  caption: [ Summary of integration test strategies ],
+)
+
+Given the three strategies above, which one should we choose? Well, the structural strategies (bottom-up or top-down) are simpler, but thread and critical modules provide better external visibility of progress (especially in complex systems).
+
+So the *best choice* should be a *combination of different strategies*:
+- Use *top-down/bottom-up* for relatively small components and subsystems;
+- *Combinations of thread and critical module* integration testing for larger subsystems.
+
+== E2E Testing
+#definition("End-to-end (E2E)")[
+  *End-to-end (E2E)* testing is a software testing methodology to test a functional and data application flow consisting of several sub-systems working together from start to end.
+]
+At times, these systems are developed in different technologies by different teams or organizations. Finally, they come together to form a functional business application. Hence, testing a single system would not suffice. Therefore, *end-to-end testing* verifies the application from start to end putting all its components together.
+
+The following is a list of common types of tests that use the E2E system:
+
+- *Functional testing*: Check whether the software meets the functional requirements.
+- *Performance testing*:
+  - Detect *bottlenecks* affecting response time, utilization, throughput
+  - Detect *inefficient algorithms*
+  - Detect *hardware/network issues*
+  - Identify *optimization possibilities*
+- *Load Testing*:
+  - *Expose bugs* such as memory leaks, mismanagement of memory,buffer overflows
+  - Identify *upper limits of components*
+  - *Compare alternative architectural options*
+- *Stress Testing*: Make sure that the system recovers gracefully after failure.
