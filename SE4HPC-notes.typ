@@ -56,8 +56,7 @@ We can summarize the skills of a software engineer as follows:
 - Interaction with different cultures
 - Domain knowledge
 The quality of human resources is of primary importance.
-The main goal of a software engineer is to develop software products. Not
-only is the product significant, but the process is also fundamental. The quality of the process affects the quality of the product.
+The main goal of a software engineer is to develop software products. Not only is the product significant, but the process is also fundamental. The quality of the process affects the quality of the product.
 
 == The software product and the process
 The product developed by a software engineer differs from traditional product types. It isn't easy to describe and evaluate because it is intangible. Some *aspects affecting the product quality*:
@@ -1471,3 +1470,56 @@ The following is a list of common types of tests that use the E2E system:
   - Identify *upper limits of components*
   - *Compare alternative architectural options*
 - *Stress Testing*: Make sure that the system recovers gracefully after failure.
+
+== Test case generation
+=== Introduction
+*Testing Workflow* is a *type of software testing that verifies that each software workflow accurately reflects the given business process*. A workflow is a series of tasks to produce a desired result, usually involving several stages or steps. For any business process, testing these sequential steps is defined as "workflow testing".
+
+#figure(
+  image("figures/testing-workflow.jpg", width: 90%),
+  caption: [ Testing workflow ],
+)
+
+Test cases can be generated in a *black-box* or *white-box manner*. The *White Box* is a generation based on *code features*. Meanwhile, the *Black Box* is a generation based on *specification features*.
+
+Test case generation can be done manually (no need to explain) or automatically. Automatic generation can be done in several ways:
+- *Combinatorial testing*. It enumerates all possible inputs according to some policy (e.g. smaller to larger).
+- *Concolic Execution*. It's a pseudo-random generation of inputs guided by symbolic path properties.
+- *Fuzz testing (fuzzing)*. It's a pseudo-random generation of inputs, including invalid, unexpected inputs.
+- *Search-based* testing. It explores the space of valid inputs, looking for those that improve some metric (e.g. coverage, diversity, fault inducing capability).
+- *Metamorphic testing*. Generates new test cases based on some metamorphic relationships and other previously defined test cases.
+
+=== Concolic Execution
+*Concolic Execution* (concrete-symbolic execution) is an automatic generation of test cases. It's a pseudo-random generation of inputs guided by symbolic path properties.
+
+In other words, the concolic execution *performs symbolic execution* alongside concrete execution (concrete inputs). Under the hood, in concolic execution a *state* combines a symbolic part and a concrete part, used as needed to make progress in the exploration.
+
+The steps are then as follows:
+- Concrete $arrow$ Symbolic, derive conditions to explore new paths.
+- Symbolic $arrow$ Concrete, simplifying conditions to generate concrete inputs.
+
+Let's take an example to clarify the explanation.
+
+See the code below:
+```python
+def m2 (x: int , y : int):
+  z: int = bb (y) # black - box function
+  if z == x:
+    z = y + 10
+    if x <= z:
+      print(" Log message .")
+```
+Let's explore all the paths of the m2 method, starting with *a (random) concrete input* and at the same time building the *symbolic condition* of the explored path. Unfortunately, in some cases we will not be able to solve the symbolic execution. For example, the behavior of the first if-condition (z == x) is unknown in the code. For this reason, we execute it with the identified input cases: given y = 7, run bb(7) and return 14. With this arrangement, the condition can be solved.
+
+=== Concurrent systems testing
+There are many difficulties in testing concurrent software. For example, the concurrency bugs are non-deterministic and can only manifest themselves within certain interleavings. Furthermore, the interleavings depend on execution conditions that are not under the direct control of the program.
+
+== Testing Frameworks
+In software development, we typically use *unit testing frameworks* such as the xUnit frameworks (for example, JUnit and NUnit), which allow us to run unit tests to determine whether different parts of the code behave as expected under different circumstances.
+
+The elements of unit test frameworks:
+- *Test Runner*: it's a component that orchestrates the execution of tests and delivers the result to the user. The runner can use a graphical inter-face, a textual interface or return a special value to indicate the results of the execution of the tests.
+- *Test Case*: in most cases this is a class from which our application-specific code inherits.
+- *Test Fixture*: it represents the preparation needed to set up the initial state required for a test case before the test, and to return to the original state after the test.
+- *Test Suite*: this is a collection of test cases that share the same fixture.
+- *Assertions*: the functions/macros that check the state or output of the system under test (oracles).
