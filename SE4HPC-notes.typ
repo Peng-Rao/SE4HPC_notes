@@ -1523,3 +1523,31 @@ The elements of unit test frameworks:
 - *Test Fixture*: it represents the preparation needed to set up the initial state required for a test case before the test, and to return to the original state after the test.
 - *Test Suite*: this is a collection of test cases that share the same fixture.
 - *Assertions*: the functions/macros that check the state or output of the system under test (oracles).
+
+#pagebreak()
+
+= Software Configuration Management
+*Software Configuration Management* is a systematic process for managing changes to software products throughout their lifecycle. It ensures consistency, traceability, and control over software development, testing, and deployment by tracking modifications, maintaining version histories, and coordinating team collaboration.
+
+The basic approach to using a *decentralized CM* is to have a repository (project) on the server side.
+- When we want to work on the project, we clone the repository on the local PC. This workflow is used because we can work offline and on the local project without making critical changes to the repository server side.
+- When we want to work on the project, we *clone* the repository on the local PC. This workflow is used because we can work offline and on the local project without making critical changes to the repository server side.
+- The local changes can be saved using the *commit* command and when we are ready to publish our changes, we use the *push* command to update the repository on the server side.
+- After a push, anyone who has a local copy should make a *pull* command to update the local project.
+
+== Workflows
+In Configuration Management (CM), it's important to define a workflow. A workflow then defines how an organization uses CM for a specific project.
+
+The main principles are:
+- Keep the master repository as clean as possible.
+- The distinction between local and central repositories is not sufficient in the case of multiple contributors.
+- On the central repository we can create a master repository and as many branches as we want.
+- A new commit only becomes part of the master if the whole team agrees.
+
+In detail, the GitFlow is:
++ If we want to develop a new feature or idea, *create a new branch*. A branch can be thought of as a new, independent sub-repository, where we can experiment without affecting what is in the master. #figure(image("figures/gitflow-1.jpg", width: 70%))
++ New versions of software can be produced in the branch. #figure(image("figures/gitflow-2.jpg", width: 70%))
++ When the work is done, we can *make a pull request*. Then the sub-teams ask the whole team to review the changes and decide whether or not to accept them. The sub-team has already merged any local changes into the server side of the branch. #figure(image("figures/gitflow-3.jpg", width: 70%))
++ A discussion starts, and new versions can be created in the branch during the discussion. #figure(image("figures/gitflow-4.jpg", width: 70%))
++ Finally, the code is deployed and tested. #figure(image("figures/gitflow-5.jpg", width: 70%))
++ And the branch is *merged into the master*. #figure(image("figures/gitflow-6.jpg", width: 70%))
