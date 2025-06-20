@@ -1,7 +1,6 @@
 #import "@local/simple-note:0.0.1": *
 #show: codly-init.with()
 
-
 #show: simple-note.with(
   title: [
     Software Engineering for High Performance Computing
@@ -10,8 +9,8 @@
   authors: (
     (
       name: "Rao",
-      github: "https://github.com/Raopend",
-      homepage: "https://github.com/Raopend",
+      github: "https://github.com/Peng-Rao",
+      homepage: "https://github.com/Peng-Rao",
     ),
   ),
   affiliations: (
@@ -21,11 +20,8 @@
     ),
   ),
   // cover-image: "./figures/polimi_logo.png",
-  background-color: "#FAF9DE",
+  background-color: "#DDEEDD",
 )
-#set math.mat(delim: "[")
-#set math.vec(delim: "[")
-#set math.equation(supplement: [Eq.])
 
 = Introduction
 == Why software engineering is important
@@ -1031,19 +1027,12 @@ The Petri net uses a graphic tool. It is a bipartite-directed graph containing p
   caption: [ Petri net graphic ],
 )
 
-A Petri net is a four-tuple:
-$
-  P N =<P, T, I, O>
-$
-- $P$: a *finite set of places* ${p_1, p_2, dots, p_n}$
-- $T$: a *finite set of transitions* ${t_1, t_2, dots, t_s}$
-- $I$: an *input function* $I: T times P arrow.long {0, 1}$
-- $O$: an *output function* $O: T times P arrow.long {0, 1}$
-It's also possible to add another term called $M^0$, which is an initial marking $P arrow.long N$:
-$
-  P N = < P, T, I, O, M^0 >
-$
-Formula called also *marked Petri net*.
+A Petri net is a five-tuple $N = (P, T, F, W, M^0)$ where:
+- $P$ is a finite set of places;
+- $T$ is a finite set of transitions;
+- $F$ is a flow relation between places and transitions and vice versa.
+- $W$ is a weight function that assigns a positive integer to each arc in the flow relation;
+- $M^0$ is the initial marking, a function that assigns a non-negative integer to each place.
 
 #example("An example of a Petri net")[
   #figure(image("figures/Petri-net-example.jpg", width: 60%))
