@@ -1015,6 +1015,8 @@ On the other hand, to verify the architectural level, it is necessary to conside
   DevOps is a *set of practices, tools, and a cultural philosophy that automate and integrate the processes between software development and IT teams*. It emphasizes team empowerment, cross-team communication and collaboration, and technology automation.
 ]
 
+#pagebreak()
+
 == Petri Net
 It is necessary to model distributed systems to study the concurrent use of resources at the architectural level.
 
@@ -1023,7 +1025,7 @@ A *Petri Net (PT Net or P/T Net)*, a place/transition net (PT net), is one of se
 The Petri net uses a graphic tool. It is a bipartite-directed graph containing places (circles), transitions (bars), and directed arcs.
 
 #figure(
-  image("figures/Petri-net-graphic.jpg", width: 80%),
+  image("figures/Petri-net-graphic.jpg", width: 50%),
   caption: [ Petri net graphic ],
 )
 
@@ -1034,19 +1036,8 @@ A Petri net is a five-tuple $N = (P, T, F, W, M^0)$ where:
 - $W$ is a weight function that assigns a positive integer to each arc in the flow relation;
 - $M^0$ is the initial marking, a function that assigns a non-negative integer to each place.
 
-#example("An example of a Petri net")[
-  #figure(image("figures/Petri-net-example.jpg", width: 60%))
-  - $P = {p_1, p_2, p_3}$
-  - $T = {t_1, t_2, t_3}$
-  - $I = mat(1, 0, 0; 0, 1, 0; 0, 0, 1), O = mat(0, 1, 0; 0, 0, 1; 1, 0, 0)$
-  - $M^0=(1, 0, 0)$
-  Note:
-  - $p_1$ is the input place of transition $t_1$
-  - $p_2$ is the output place of transition $t_1$
-]
-
 Some observations of the Petri net:
-- In a given marking $M$, a transition $t$ can fire only if it is enabled.
+- *In a given marking $M$, a transition $t$ can fire only if it is enabled.*
 - An enabled transition not necessarily fires.
 - More than one transition can be enabled in a marking.
 - If two transitions are enabled at the same time:
@@ -1061,13 +1052,13 @@ Some observations of the Petri net:
 - removes one token from each input place of the transition
 - adds one token to each output place of the transition
 
-#figure(image("figures/dynamics.jpg", width: 80%))
+#figure(image("figures/dynamics.jpg", width: 60%))
 
 === Basic Constructs
 ==== Sequential Actions
 Each action is a transition.
 
-#figure(image("figures/sequential-actions.jpg", width: 70%))
+#figure(image("figures/sequential-actions.jpg", width: 40%))
 
 ==== Dependency
 A transition requires two inputs.
@@ -1087,17 +1078,19 @@ These two sequences can occur simultaneously.
 ==== Synchronization
 Machine can process one part at once.
 
-#figure(image("figures/synchronization.jpg", width: 60%))
+#figure(image("figures/synchronization.jpg", width: 40%))
 
 ==== Resource Sharing
 One worker for two machines. The worker can work at one machine at a time.
 
-#figure(image("figures/resource-sharing.jpg", width: 60%))
+#figure(image("figures/resource-sharing.jpg", width: 40%))
 
 ==== Buffer (Queue)
 The buffer can hold a limited number of parts.
 
-#figure(image("figures/buffer.jpg", width: 60%))
+#figure(image("figures/buffer.jpg", width: 40%))
+
+==== Producer-Consumer Model
 
 #figure(
   image("figures/petri-net-example-1.jpg", width: 60%),
@@ -1111,12 +1104,16 @@ The buffer can hold a limited number of parts.
   ],
 )
 
+==== Deadlock
+
 #figure(
-  image("figures/petri-net-example-3.jpg"),
+  image("figures/petri-net-example-3.jpg", width: 60%),
   caption: [
     Example of Petri nets of deadlock.
   ],
 )
+
+
 
 == Quantitative impact of architectural decisions
 Architectural choices directly influence several software qualities (e.g., scalability, reliability, availability, usability).
@@ -1246,7 +1243,9 @@ If there are too many failures, the circuit breaker inhibits future calls by mov
 
 #figure(image("figures/circuit-breaker.jpg", width: 70%))
 
-== Static Analysis
+#pagebreak()
+
+= Static Analysis (Symbolic Execution)
 *Static Analysis* analyzes the source code, and each analyzer targets a fixed set of hard-coded (pre-defined, not custom) properties. It is entirely automatic, and the output reports two types of results: *safe (no issues)* and *unsafe (potential problems)*. Also, the analysis is made on generic (or symbolic) inputs.
 
 The properties that we have mentioned are safety properties, such as:
@@ -1262,7 +1261,7 @@ The properties that we have mentioned are safety properties, such as:
 Using the static analysis, we can use the symbolic execution.
 
 #definition("Symbolic Execution")[
-  The *symbolic execution* is a technique to analyze the program by executing it with symbolic inputs instead of concrete values. The symbolic execution engine generates a set of constraints that must be satisfied for the program to reach a specific state.
+  The *symbolic execution* is a technique to analyze the program by executing it with *symbolic inputs* instead of concrete values. The symbolic execution engine generates a set of constraints that must be satisfied for the program to reach a specific state.
 ]
 
 The symbolic execution analyzes actual source code and reachability and path feasibility properties. It is automatic and may fail to explore all possible paths. Sometimes, it is used to support testing.
@@ -1349,6 +1348,15 @@ Finally, we can draw the *Execution Tree*. The execution paths can be collected 
 #pagebreak()
 
 = Testing
+
+=== Introduction
+*Testing Workflow* is a *type of software testing that verifies that each software workflow accurately reflects the given business process*. A workflow is a series of tasks to produce a desired result, usually involving several stages or steps. For any business process, testing these sequential steps is defined as "workflow testing".
+
+#figure(
+  image("figures/testing-workflow.jpg", width: 90%),
+  caption: [ Testing workflow ],
+)
+
 *Testing* (dynamic analysis) is an approach to verification. The *main goal of testing is to make programs fail*. Other common goals are:
 - Exercise different parts of a program to increase coverage;
 - Make sure the interaction between components works (integration testing);
@@ -1385,7 +1393,9 @@ Typically, the integration test is defined by the Design Document. In the Design
 - Build Plan that establishes the order of the implementation;
 - A Test Plan that defines how to carry out integration testing is needed.
 
-== Integration testing: strategies
+#pagebreak()
+
+== Integration Testing
 === Big Bang
 Test only after integrating all modules together (not even a real strategy).
 \
@@ -1398,24 +1408,30 @@ Test only after integrating all modules together (not even a real strategy).
 === Iterative and incremental strategies
 The main action is run after components are released (not just at the end). The strategy can be done in three different ways:
 
-==== Hierarchical
 Based on the hierarchical structure of the system. It can be done *top-down* or *bottom-up*.
 
-*Top-down strategy*. Work from the top level (in terms of "use" or "include" relationship) down to the bottom level. As modules are completed (according to the building plan), more functionality is testable. We also need to replace some stubs, and we need other stubs for lower levels. *When all modules are incorporated, the whole functionality can be tested.* *Pros*: The drivers use the top level interfaces (e.g. REST APIs). *Cons*: This strategy requires stubs of used modules at each step of the process.
+==== *Top-down strategy*
+Work from the top level (in terms of "use" or "include" relationship) down to the bottom level. As modules are completed (according to the building plan), more functionality is testable. We also need to replace some stubs, and we need other stubs for lower levels. *When all modules are incorporated, the whole functionality can be tested.*
+- *Pros*: The drivers use the top level interfaces (e.g. REST APIs).
+- *Cons*: This strategy requires stubs of used modules at each step of the process.
 
 #figure(
-  image("figures/example-top-down.jpg", width: 70%),
+  image("figures/example-top-down.jpg", width: 50%),
   caption: [ Example of top-down strategy ],
 )
 
-*Bottom-up strategy*. Starting from the leaves of the "uses" hierarchy. *Pros*: An advantage is that it doesn't require stubs. *Cons*: Typically requires more drivers (one for each module, as in unit testing). Another thing to consider is that it may create several work-ing subsystems, and each working subsystem will eventually be integrated into the final one.
+==== *Bottom-up strategy*
+Starting from the leaves of the "uses" hierarchy.
+- *Pros*: An advantage is that it doesn't require stubs.
+- *Cons*: Typically requires more drivers (one for each module, as in unit testing). Another thing to consider is that it may create several working subsystems, and each working subsystem will eventually be integrated into the final one.
 
 #figure(
-  image("figures/example-bottom-up.jpg", width: 70%),
+  image("figures/example-bottom-up.jpg", width: 50%),
   caption: [ Example of bottom-up strategy ],
 )
 
-*Threads*. A thread is a part of several modules that together provide a user-visible programme function. By using the thread strategy we can have some advantages.
+==== *Threads strategy*
+A thread is a part of several modules that together provide a user-visible programme function. By using the thread strategy we can have some advantages.
 \
 *Pros*:
 - We can maximize the progress visible to the user (or other stakeholders);
@@ -1423,11 +1439,12 @@ Based on the hierarchical structure of the system. It can be done *top-down* or 
 - An integration plan is usually more complex.
 
 #figure(
-  image("figures/example-thread.jpg", width: 70%),
+  image("figures/example-thread.jpg", width: 50%),
   caption: [ Example of thread strategy ],
 )
 
-*Critical*. The critical modules strategy starts with the highest risk modules. Risk assessment is a necessary first step. *The key point of this strategy is the risk-oriented process*. Integration and testing as a risk mitigation activity, designed to deliver any bad news as early as possible.
+==== *Critical modules strategy*
+The critical modules strategy starts with the highest risk modules. Risk assessment is a necessary first step. *The key point of this strategy is the risk-oriented process*. Integration and testing as a risk mitigation activity, designed to deliver any bad news as early as possible.
 
 #figure(
   image("figures/summary-integration-test-strategies.jpg", width: 80%),
@@ -1460,18 +1477,12 @@ The following is a list of common types of tests that use the E2E system:
   - *Compare alternative architectural options*
 - *Stress Testing*: Make sure that the system recovers gracefully after failure.
 
-== Test case generation
-=== Introduction
-*Testing Workflow* is a *type of software testing that verifies that each software workflow accurately reflects the given business process*. A workflow is a series of tasks to produce a desired result, usually involving several stages or steps. For any business process, testing these sequential steps is defined as "workflow testing".
+#pagebreak()
 
-#figure(
-  image("figures/testing-workflow.jpg", width: 90%),
-  caption: [ Testing workflow ],
-)
-
+== Test case Generation
 Test cases can be generated in a *black-box* or *white-box manner*. The *White Box* is a generation based on *code features*. Meanwhile, the *Black Box* is a generation based on *specification features*.
 
-Test case generation can be done manually (no need to explain) or automatically. Automatic generation can be done in several ways:
+Test case generation can be done manually or automatically. Automatic generation can be done in several ways:
 - *Combinatorial testing*. It enumerates all possible inputs according to some policy (e.g. smaller to larger).
 - *Concolic Execution*. It's a pseudo-random generation of inputs guided by symbolic path properties.
 - *Fuzz testing (fuzzing)*. It's a pseudo-random generation of inputs, including invalid, unexpected inputs.
