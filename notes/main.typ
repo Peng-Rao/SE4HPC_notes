@@ -1,5 +1,7 @@
 #import "@local/simple-note:0.0.1": *
-#show: codly-init.with()
+// #show: codly-init.with()
+#show: zebraw
+
 
 #show: simple-note.with(
   title: [

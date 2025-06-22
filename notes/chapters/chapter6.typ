@@ -163,21 +163,45 @@ Consider *two semaphores synchronized* to control a street intersection. Initial
 
 In @fig:example2 the transitions from yellow to red of one semaphore and from red to green of the other occur at the same time. Places $R_1$, $G_1$, and $Y_1$ represent the first semaphore, while places $R_2$, $G_2$, and $Y_2$ represent the second semaphore.
 
+Transitions $T_1$ and $T_3$ are the ones that determine the movements from $Y_x$ and $R_y$ to $R_x$ and $G_y$, while $T_2$ and $T_4$ regulate the transition from $G$ to $Y$ of an individual semaphore independently from the other.
+
+We can also see that $T_1$ occurs always after $T_4$. Similarly, the transitions causing a movement of tokens from $R_2$ to $G_2$ and from $G_1$ to $Y_1$ are $T_3$ and $T_2$, respectively. Again, $T_3$ occurs always after $T_2$.
+
 #figure(
   image("../figures/petri-example-2.jpg", width: 50%),
   caption: [ Synchronized semaphores. ],
 ) <example2>
 
+==== Question 3
+Demonstrate that, given an initial marking representing in your Petri net one green semaphore and one red semaphore, *it can never happen that the two semaphores are green at the same time*.
 
+@fig:reachability-graph-example-1 shows the reachability graph of the Petri net in @fig:example2. Given the initial marking, the case ${G_1, G_2}$ never occurs, thus demonstrating that the fulfill the required constraint.
+
+#figure(
+  image("../figures/reachability-graph-example-1.jpg", width: 50%),
+  caption: [ Reachability graph ],
+) <reachability-graph-example-1>
+
+==== Question 4
+Reflect on the behavior of your Petri net. Which one of the following three sentences is true in your case? Provide a justification for your answer.
+
++ One semaphore moves from red to green at the same time in which the other moves from green to yellow (*True*);
++ One semaphore moves from red to green after the other moves from green to yellow (*False*);
++ One semaphore moves from red to green before the other moves from green to yellow (*False*).
+
+Considering as initial marking ${R_1, G_2}$, we can notice
+that the transition that causes $R_1$ to lose its token and $G_1$ to gain it is $T_1$, while the transition that causes $G_2$ to lose its token in favor of $Y_2$ is $T_4$.
+
+#pagebreak()
 
 == Quantitative impact of architectural decisions
-Architectural choices directly influence several software qualities (e.g., scalability, reliability, availability, usability).
+Architectural choices directly influence several software qualities (e.g., *scalability*, *reliability*, *availability*, *usability*).
 
 To cope with this, we need metrics to quantify qualities and specific methodologies to analyze the quantitative impact of architectural choices on these qualities. The tactics are also foundational to address the issues.
 
 First, before discussing how to evaluate the quantitative impact of architectural decisions, we must introduce the availability concept and explain a system life-cycle to introduce some exciting *metrics*.
 
-In general, a *service shall be continuously available* to the user, and if it fails after a bit of downtime, it should be a *rapid service recovery*. So the availability of a service depends on:
+In general, a *service shall be continuously available* to the user, and if it fails after a bit of downtime, it should be a *rapid service recovery*. So the *availability* of a service depends on:
 - The *complexity* of the *infrastructure* architecture.
 - *Reliability* of the individual components.
 - *Ability to respond* quickly and effectively to faults.
@@ -272,7 +296,7 @@ The *Replication* is very simple to manage in the case of stateless components. 
 + *Hot spare*: One component leads, and another is always ready to take over. In the following example, C1 leads, C2 is always ready to take over. #figure(
     image("../figures/hot-spare.jpg", width: 50%),
   )
-+ *Warm spare*: One component leads and periodically updates another component. If the primary component fails, the second component takes time to update itself fully. C1 is leading and periodically updating C2. If C1 fails, some time might be needed to fully update C2. #figure(
++ *Warm spare*: One component leads and *periodically* updates another component. If the primary component fails, the second component takes time to update itself fully. C1 is leading and periodically updating C2. If C1 fails, some time might be needed to fully update C2. #figure(
     image("../figures/warm-spare.jpg", width: 50%),
   )
 + *Cold spare*: A second component is dormant, started, and updated only if required. In the following example, C2 is dormant, started, and updated only if required. #figure(
@@ -285,7 +309,7 @@ The *Replication* is very simple to manage in the case of stateless components. 
 ==== Forward error recovery
 *Forward Error Recovery* is a *tactic* in which a recovery mechanism moves the failed component to a degraded state. In a degraded state, a component continues to be available even if it is not fully functional. Here is an example:
 
-#figure(image("../figures/forward-error-recovery.jpg", width: 70%))
+#figure(image("../figures/forward-error-recovery.jpg", width: 50%))
 
 ==== Circuit breaker
 The *Circuit Breaker (CB)* tactic is a client-side resiliency pattern. The CB acts as a proxy for a remote component:
@@ -296,22 +320,57 @@ But note that there should be possible failures:
 - The call takes "too long" (CB kills the call).
 If there are too many failures, the circuit breaker inhibits future calls by moving to the open state.
 
-#figure(image("../figures/circuit-breaker.jpg", width: 70%))
+=== Example: Availability of a Kafka Cluster
+Consider the following instance of a Kafka cluster. Suppose that the servers on which the 3 Brokers are hosted have the following availability values.
+- Server Broker 1: 97%
+- Server Broker 2: 94%
+- Server Broker 3: 98%
+
+#figure(
+  image("../figures/kafka-cluster-example.jpg", width: 80%),
+  caption: [ Kafka cluster with three Brokers. ],
+)
+
+As illustrated by the schema, _Consumers_, retrieve various messages concerning certain topics. Messages are obtained through the `getMessages` operation, which can retrieve messages from any broker handling a topic and partition. For the purpose of this exercise, assume that the messages have already been published. Assume also that the schema shows all the existing partitions for the depicted topics.
+
+==== Availability 1
+What is the total availability of an operation that needs to retrieve 2 messages, one related to `Topic 3 partition 1` and the other to `Topic 2 partition 0`?
+
+This is the series of the availability of `Topic 2 partition 0` (which is not replicated, so the availability of the partition is the availability of the corresponding broker) and `Topic 3 partition 1` (which is replicated, so its availability is the parallel of the corresponding brokers).
+$
+  A = 0.94 times (1 - (1 - 0.97) times (1 - 0.98)) = 0.939
+$
+
+==== Availability 2
+What is the total availability of an operation that needs to retrieve 2 messages, one related to `Topic 1 partition 1` and the other to `Topic 4 partition 0`?
+
+This is the series of the availability of `Topic 1 partition 1` (which is not replicated, so the availability of the partition is the availability of the corresponding broker) and `Topic 4 partition 0` (also not replicated). The two partitions happen to be on the same broker:
+$
+  A = 0.98 times 0.98 = 0.96
+$
+
+==== Availability 3
+Assuming that each broker can handle only a *single partition* for each topic and that the number of available servers is fixed, define a new configuration of the Kafka Cluster so that the operation of point *Availability 2* has a total availability greater or equal to 99%.
+
+This is possible under the assumption that we can introduce new partitions in each broker while respecting the constraint of not having partitions of the same topic in a broker. This will result in the following availability, which fulfills the required constraint:
+$
+  A = (1 - (1 - 0.94) * (1 - 0.98)) times (1 - (1 - 0.97) * (1 - 0.98)) = 0.998
+$
 
 #pagebreak()
 
-= Static Analysis (Symbolic Execution)
-*Static Analysis* analyzes the source code, and each analyzer targets a fixed set of hard-coded (pre-defined, not custom) properties. It is entirely automatic, and the output reports two types of results: *safe (no issues)* and *unsafe (potential problems)*. Also, the analysis is made on generic (or symbolic) inputs.
+== Static Analysis (Symbolic Execution)
+*Static Analysis* analyzes the source code, and each analyzer targets a fixed set of hard-coded (pre-defined, not custom) properties. It is entirely automatic, and the output reports two types of results: *safe (no issues)* and *unsafe (potential problems)*. Also, the analysis is made on *generic (or symbolic) inputs*.
 
 The properties that we have mentioned are safety properties, such as:
-- No overflow for integer variables
-- No type errors
-- No null-pointer dereferencing
-- No out-of-bound array accesses
-- No race conditions
-- No useless assignments
-- No usage of undefined variables
-- No execution of specific paths
+- No _overflow_ for integer variables
+- No _type errors_
+- No _null-pointer dereferencing_
+- No _out-of-bound array accesses_
+- No _race conditions_
+- No _useless assignments_
+- No _usage of undefined variables_
+- No _execution of specific paths_
 
 Using the static analysis, we can use the symbolic execution.
 
@@ -319,85 +378,122 @@ Using the static analysis, we can use the symbolic execution.
   The *symbolic execution* is a technique to analyze the program by executing it with *symbolic inputs* instead of concrete values. The symbolic execution engine generates a set of constraints that must be satisfied for the program to reach a specific state.
 ]
 
-The symbolic execution analyzes actual source code and reachability and path feasibility properties. It is automatic and may fail to explore all possible paths. Sometimes, it is used to support testing.
-
-The checked properties by the static analysis can be of different types:
-- *Reachability*. Does some program execution reach location L (generic line of code) in S (source code)? With the reachability property, the symbolic execution tries:
-  - To verify that L cannot be reached;
-  - Or spots the condition under which L can be reached.
-  For example, in the following code:
-```
-k:    try {
-k+1:       ...
-L-1:      } catch (e) {
-L:          /* error */
-... }
-```
+The symbolic execution analyzes actual source code and reachability and path feasibility properties. It is automatic and may fail to explore all possible paths. Sometimes, it is used to support testing. The checked properties by the static analysis can be of different types:
+- *Reachability*. Does some program execution reach location `L` (generic line of code) in `S` (source code)? With the reachability property, the symbolic execution tries:
+  - To verify that `L` cannot be reached;
+  - Or spots the condition under which `L` can be reached.
 Static analysis checks the reachability properties and verifies that $L$ cannot be reached, or discovers the condition under which $L$ can be reached.
-- Path Feasibility. Is the given path $p$ feasible? With the path feasibility property, the symbolic execution tries:
+- *Path Feasibility*. Is the given path $p$ feasible? With the path feasibility property, the symbolic execution tries:
   - To verify that $p$ cannot be executed;
-  - Or *spots the condition under which p can be executed*.
+  - Or *spots the condition under which `p` can be executed*.
   The $p$ will be
   $
     p =<0,1, dots, k, dots, n>
   $
 Symbolic execution *executes programs on symbolic values*. Each symbolic value has its *symbolic states*, which keep track of the variables' (symbolic) values. The inputs are initialized with symbolic (generic) values.
 
-=== Example
-First we introduce the annotation, inputs are initialized with symbolic (generic) values:
-```
-void foo(int x, int y) {
-  ...
-```
-#figure(image("../figures/example-symbolic-execution-1.jpg", width: 70%))
-We introduce a local variable:
-```
-void foo ( int x , int y) {
-  int z := x
-```
-#figure(image("../figures/example-symbolic-execution-2.jpg", width: 70%))
-We introduce a condition. A path condition $pi$ represents a constraint on a path:
-```
-void foo ( int x , int y) {
-  int z := x
-  if (z < y)
-```
-- If condition is true
-#figure(image("../figures/example-symbolic-execution-3.jpg", width: 70%))
-- If condition is false
-#figure(image("../figures/example-symbolic-execution-4.jpg", width: 70%))
-
-Execution continues along feasible paths. In this case, the path condition $pi$ is satisfiable:
-```
-void foo ( int x , int y) {
-  int z := x
-  if (z < y)
-    z := z *2
-```
-#figure(image("../figures/example-symbolic-execution-5.jpg", width: 70%))
-Another if condition:
-```
-void foo ( int x , int y) {
-  int z := x
-  if (z < y)
-    z := z *2
-  if (x < y && z >= y )
-```
-- If condition is true
-#figure(image("../figures/example-symbolic-execution-6.jpg", width: 70%))
-- If condition is false
-#figure(image("../figures/example-symbolic-execution-7.jpg", width: 70%))
-Possible outcomes of symbolic execution:
-- Satisfiable exit ($pi$ is satisfiable): every satisfying assignment to variables in $pi$ is an input that satisfies the given property in a *concrete execution*.
-#figure(image("../figures/example-symbolic-execution-8.jpg", width: 70%))
-- Unsatisfiable exit ($pi$ is unsatisfiable): the given property cannot be satisfied by any *concrete execution*.
-#figure(image("../figures/example-symbolic-execution-9.jpg", width: 70%))
-Finally, we can draw the *Execution Tree*. The execution paths can be collected in an execution tree, where end states are marked as `SAT` or `UNSAT`.
-#figure(image("../figures/example-symbolic-execution-10.jpg", width: 70%))
-
 === Limitations
 - The *path conditions may be too complex for constraint solvers*. Because solvers are very good at checking linear constraints, but it is harder for them to reason about non-linear arithmetic, bit-wise operations, string manipulation, etc.
 - It is *impossible* or *difficult to use when the number of paths to be explored is infinite* or *huge*. For example, unbounded loops give rise to infinite sets of paths. Although the set of paths is finite, checking all loops is expensive and impractical.
 - Finally, there may be *external code*. Then the sources are not available, such as a precompiled library, or the behavior is unknown to the solver.
+
+=== Example
+```c
+int fun(int x, int y)
+{
+    int z, k;
+    if (x * y == 0)
+        return -1;
+    if (x < 0)
+        x = -x;
+    if (y < 0)
+        y = -y;
+    z = x;
+    k = y;
+    while (x != y)
+    {
+        if (x > y)
+            x = x - y;
+        else
+            y = y - x;
+    }
+    if (z % x == 0)
+        return z;
+    else
+        return k;
+}
+```
+
+==== Question 1
+Derive the path condition corresponding to the execution of path 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, 13, 14, 12, 13, 14, 12, 13, 15, 12, 16, 17.
+
+#figure(
+  table(
+    columns: 6,
+    stroke: 0.7pt,
+    align: center,
+    table.header(
+      [*\#*],
+      [*$x$*],
+      [*$y$*],
+      [*$z$*],
+      [*$k$*],
+      [$bold(pi)$],
+    ),
+
+    [1-3], [$X$], [$Y$], [], [], [],
+    [4], [$X$], [$Y$], [], [], [$X times Y != 0$],
+    [6], [$X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+    [7], [$-X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+    [8], [$-X$], [$Y$], [], [], [$(X < 0) and (Y > 0)$],
+    [10], [$-X$], [$Y$], [$-X$], [], [$(X < 0) and (Y > 0)$],
+    [11], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0)$],
+    [12], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X != Y)$],
+    [13], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y)$],
+    [14], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y)$],
+    [12], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X-Y != Y)$],
+    [13], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X-Y > Y)$],
+    [14], [$-X-2Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X > 2Y)$],
+    [12], [$-X-2Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X < 3Y)$],
+    [15], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X < 3Y)$],
+    [12], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y)$],
+    [16], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y) and (-X% (-X / 5) =0)$],
+    [17], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y)$],
+  ),
+)
+The path condition is consistent. Possible test case: $x = -10$ and $y = 4$.
+
+==== Question 2
+Derive the path condition corresponding to the execution of path 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 16, 18.
+
+#figure(
+  table(
+    columns: 6,
+    stroke: 0.7pt,
+    align: center,
+    table.header(
+      [*\#*],
+      [*$x$*],
+      [*$y$*],
+      [*$z$*],
+      [*$k$*],
+      [$bold(pi)$],
+    ),
+
+    [1-3], [$X$], [$Y$], [], [], [],
+    [4], [$X$], [$Y$], [], [], [$X times Y != 0$],
+    [6], [$X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+    [7], [$-X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+    [8], [$-X$], [$Y$], [], [], [$(X < 0) and (Y < 0)$],
+    [9], [$-X$], [$-Y$], [], [], [$(X < 0) and (Y < 0)$],
+    [10], [$-X$], [$-Y$], [$-X$], [], [$(X < 0) and (Y < 0)$],
+    [11], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (Y < 0)$],
+    [12], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (Y < 0) and (-X != -Y)$],
+    [16], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (-X = -Y) and ((-X)%(-X) != 0)$],
+    [18], [], [], [], [], [],
+  ),
+)
+
+The path condition is not feasible as it is not possible that $(-X)%(-X) != 0$. Therefore, the path cannot be executed.
 
 #pagebreak()

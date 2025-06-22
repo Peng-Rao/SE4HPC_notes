@@ -111,6 +111,35 @@ So the *best choice* should be a *combination of different strategies*:
 - Use *top-down/bottom-up* for relatively small components and subsystems;
 - *Combinations of thread and critical module* integration testing for larger subsystems.
 
+=== Example: Integration Testing of Miscroservices
+
+#figure(
+  image("../figures/integration-testing-microservices.jpg", width: 70%),
+  caption: [ Example of integration testing of microservices ],
+)
+
+The architecture is organized into eight stateless microservices collaborating to fulfill requests `R1` and `R2`. `S1` is the front-end service that receives both requests. The fulfillment of request `R1` requires the interaction with services `S2` and `S3` (through sub-requests `R1.1` and `R1.2`, respectively), which, in turn, need to interact with other services. In particular, `S2` interacts with `S4` and `S5` and `S3` with `S5` and `S6`. The fulfillment of `R2` requires that `S1` interacts with `S8`, which, in turn, interacts with `S6` and `S7`.
+
+==== Question 1
+Define an integration and test plan for the architecture, motivating your choice.
+
+We could use a _*bottom-up approach mixed with a thread one*_. More specifically, since we know the dependencies between services with reference to the two requests the system is able to fulfill (`R1` and `R2`), we could focus on one of the two at a time.
+
+Focusing on `R1`, we can see that we can focus first on the integration of `S2` with `S4` and `S5`. To test such integration, we would need a driver that issues request `R1.1`. This implies that, for the purpose of this integration, the part of `S5` in charge of responding to request `R1.2.1` is not needed and, therefore, can be postponed. After completing this step, we can focus on the integration and testing of `S3` with `S5` and `S6`. In this case, `S5` must be able to respond to request `R.1.2.1` and a driver issuing `R1.2` would be needed. Finally, we can integrate `S1` with `S2` and `S3`.
+
+We use a similar approach to test request `R2`, and in particular, the integration of `S8` with `S6` and `S7` and then of `S1` with `S8`.
+
+==== Question 2
+Assume that you are asked to test whether the availability improvement theoretically obtained with the duplication of services is actually achieved. How would you proceed to perform such a test?
+
+An availability test should be performed in an environment as close as possible to the operational one. We need to execute the system for a significant time interval, ensuring that all features offered by the system are actually executed, and we need to compute `MTTF` and `MTTR` as availability can be measured as `MTTF/(MTTF + MTTR)`. Notice that in most cases, the system repair is performed by human beings. This implies that the measurement of `MTTR` concerns the ability of the repairing team to react quickly and repair the problem.
+
+Said this, in our case, in order to measure the improvement obtained through the duplicated configuration, we need, first, to execute, for a significant amount of time, the whole system without any replication. In this execution, we will make sure `R1` and `R2` will both be called multiple times also by users working in parallel.
+
+After having computed `MTTF` and `MTTR` for the system in this timeframe, we will perform the same experiment using the duplicated components. In this case, we can also purposefully take down one of the replicas, to make sure that indeed replication overall achieves the desired availability.
+
+#pagebreak()
+
 == E2E Testing
 #definition("End-to-end (E2E)")[
   *End-to-end (E2E)* testing is a software testing methodology to test a functional and data application flow consisting of several sub-systems working together from start to end.
