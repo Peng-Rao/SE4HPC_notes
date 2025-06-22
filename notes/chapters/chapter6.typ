@@ -397,7 +397,7 @@ Symbolic execution *executes programs on symbolic values*. Each symbolic value h
 - It is *impossible* or *difficult to use when the number of paths to be explored is infinite* or *huge*. For example, unbounded loops give rise to infinite sets of paths. Although the set of paths is finite, checking all loops is expensive and impractical.
 - Finally, there may be *external code*. Then the sources are not available, such as a precompiled library, or the behavior is unknown to the solver.
 
-=== Example
+=== Example: Loop
 ```c
 int fun(int x, int y)
 {
@@ -495,5 +495,59 @@ Derive the path condition corresponding to the execution of path 1, 2, 3, 4, 6, 
 )
 
 The path condition is not feasible as it is not possible that $(-X)%(-X) != 0$. Therefore, the path cannot be executed.
+
+=== Example: Tree
+```c
+def foo(a, b, c):
+    r = 0
+    x = 0
+    y = 0
+    if a[b] >= 0:
+        y = 7
+    else:
+        y = 5
+
+    a[y] = c
+
+    if a[b] < 3:
+        x = 2
+        if a[b] <= 0 or c != 0:
+            y = y - 3
+
+    r = a[x + y - 2]
+    return r
+```
+
+==== Question 1
+Consider the function foo and carry out a symbolic execution for all paths (note that, in this case, the number of paths is finite). Given that this code fragment does not contain loops, you may be facilitated in your work if you create a binary tree to represent these paths. The nodes of the tree shall include at least the initial symbolic assignment in lines 0-2 (root), the final assignments (leaves), and all the conditional statements (internal nodes). You can annotate the arcs with the conditions and assignments that are relevant to the corresponding part of the code. For each path (i.e., each leaf of the previous tree structure), determine the symbolic condition that ensures the execution of the corresponding path. Then, identify the unfeasible path(s), if any.
+
+#figure(
+  image("../figures/symbolic-execution-tree.jpg", width: 80%),
+  caption: [ Symbolic execution tree of the function foo. ],
+)
+
+There are 6 leaves (from left to right) with the following path conditions:
+- $A[B] < 0 and A[B] >= 3$. Path: 0, 1, 2, 3, 6, 7, 8, 9, 10, 15, 16, 17 *(unfeasible)*
+- $A[B] < 0 and A[B] < 3 and A[B] > 0 and C = 0$. Path: 0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+- $A[B] < 0 and A[B] < 3 and (A[B] != 0 or C = 0)$. Path: 0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+- $A[B] >= 0 and A[B] >= 3$. Path: 0, 1, 2, 3, 4, 5, 9, 10, 15, 16, 17
+- $A[B] >= 0 and A[B] < 3 and A[B] > 0 and C = 0$. Path: 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 14, 15, 16, 17
+- $A[B] ≥ 0 and A[B] < 3 and (A[B] ≤ 0 or C = 0)$. Path: 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14, 15, 16, 17
+
+==== Question 2
+Suppose that we wanted to guarantee that the result of the foo function is not zero. According to the previous analysis, try to determine a pre-condition among the possible ones that ensures the satisfaction of this property.
+
+- $|a| = 10$ and $0 < b < 9$ and $a[b] < 0$ and $a[2] != 0$
+- $|a| = 10$ and $0 < b < 9$ and $a[b] \ge 3$ and $a[5] != 0$
+- $|a| = 10$ and $0 < b < 9$ and $0 < a[b] < 3$ and $c = 0$ and $a[7] != 0$
+- $|a| = 10$ and $0 < b < 9$ and ($a[b] = 0$ or ($0 < a[b] < 3$ and $c != 0$)) and $a[4] != 0$
+
+Considering the tree, the conditions above ensure the execution of feasible paths to the leaves and further constrain the return value $r$.
+
+Note that path 0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 14, 15, 16, 17 (path 5) cannot lead to the desired condition; indeed, it would give the following condition:
+$
+  (|a| = 10 "and" 0 <= b <= 9 "and" 0 < a[b] < 3 "and" c = 0 "and" a[7] != 0)
+$
+which cannot hold because $a[7]$ is equal to $c$, which, in turn, should be 0. Therefore, the corresponding path must return 0 to the caller.
 
 #pagebreak()
