@@ -1,5 +1,4 @@
 = Introduction
-== Why software engineering is important
 Software is everywhere and our society is now totally dependent on *software-intensive systems*. Obviously, our society could not function without software. For example, transportation systems, energy systems and manufacturing systems.
 
 == Definition
@@ -26,8 +25,7 @@ We can summarize the skills of a software engineer as follows:
 - Enterprise organization
 - Interaction with different cultures
 - Domain knowledge
-The quality of human resources is of primary importance.
-The main goal of a software engineer is to develop software products. Not only is the product significant, but the process is also fundamental. The quality of the process affects the quality of the product.
+The quality of human resources is of primary importance. The main goal of a software engineer is to develop software products. Not only is the product significant, but the process is also fundamental. The quality of the process affects the quality of the product.
 
 == The software product and the process
 The product developed by a software engineer differs from traditional product types. It isn't easy to describe and evaluate because it is intangible. Some *aspects affecting the product quality*:
@@ -53,14 +51,16 @@ Another process quality to consider is timeliness. The definition is: "the abili
 
 As you can see by the graph, the "user needs" is a linear function. A software engineer should be able to respond to the client's requests as soon as possible. As the graph shows, a request made on time $t_0$ is completed on time $t_2$; but another request can be made at that time, and so on. The actual system capabilities can't grow up always because sometimes there are “brainstorming times” to increase product quality.
 
-#figure(image("../figures/user-needs.jpg", width: 80%))
+#figure(
+  image("../figures/user-needs.jpg", width: 60%),
+  caption: "User needs vs system capabilities",
+)
 
 == Software Lifecycle
 Initially, no reference model is inside a software lifecycle: code and fix(or refactoring). However, a traditional waterfall model is chosen to react to the many problems that a software engineer faces.
 
 === Waterfall model
-The *waterfall model* is a breakdown of development activities into linear sequential phases, meaning they are passed down onto each other, where each phase depends on the deliverables of the previous one and corresponds to a specialization of tasks. Its organization is the following:
-*High phases*:
+The *waterfall model* is a breakdown of development activities into linear sequential phases, meaning they are passed down onto each other, where each phase depends on the deliverables of the previous one and corresponds to a specialization of tasks. Its organization is the following: *High phases*:
 - *Feasibility Study*: this is a cost-benefit analysis. The main goal is determining whether the project should be started, possible alternatives, and needed resources. The outcome is a feasibility study document. This paper provides
   - A preliminary problem description
   - Some scenarios describing possible solutions

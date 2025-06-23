@@ -71,6 +71,7 @@ Worker Pooling Advantages (quality attribute trade-offs)
 - When *queues* are *full* the dispatcher drops the incoming requests to keep high performance (optimize scalability and performance by sacrificing availability).
 - Dispatcher balances the workload among available workers according to specific policies.
 
+#pagebreak()
 
 == Three-Tier Architecture
 *Three-tier architecture* is a well-established software application architecture that organizes applications into three logical and physical computing tiers:
@@ -123,10 +124,9 @@ Kafka is a framework for the event-driven paradigm:
 - Allow *consumers* to process events as they occur or retrospectively.
 These services are offered in a *distributed, highly scalable, elastic, fault-tolerant, and secure manner*.
 
-#figure(
-  image("../figures/Kafka-architecture.jpg", width: 70%),
-  caption: [ Kafka architecture (the ZooKeeper is a "health manager") ],
-)
+#figure(image("../figures/Kafka-architecture.jpg", width: 70%), caption: [
+  Kafka architecture (the ZooKeeper is a "health manager")
+])
 
 Some important features:
 - Each *broker* handles a set of *topics* and *topic partitions*, parts including sets of messages on the topic.
@@ -143,10 +143,9 @@ Some important features:
 + Brokers commit messages by storing them in the corresponding partition;
 + Leader adds the message to followers (replicas) if available.
 
-#figure(
-  image("../figures/sequence-diagram-kafka-producer.jpg", width: 70%),
-  caption: [ Sequence diagram of a producer sending a message to a Kafka broker ],
-)
+#figure(image("../figures/sequence-diagram-kafka-producer.jpg", width: 70%), caption: [
+  Sequence diagram of a producer sending a message to a Kafka broker
+])
 
 A possible *issue*: in case of failure, the producer may not get the response (message number 7 in figure). In this case, the producer has to resend the message and kafka brokers can identify and eliminate duplicates.
 
@@ -160,10 +159,9 @@ Each consumer can rely on a persistent log to keep track of the offset so that i
 
 *Issue case*: if the consumer fails after having elaborated messages and before storing the new offset in the log, the same messages will be retrieved again (*at-least-once semantics*). Note that the delivery semantics can be changed if the new offset is store before the elaboration and we can choose *at-most-once semantics* because, if failing after storing the offset, the effect of the received messages does not materialize. Finally, transactional management of the log also allows *exactly-once semantics*.
 
-#figure(
-  image("../figures/sequence-diagram-kafka-consumer.jpg", width: 70%),
-  caption: [ Sequence diagram of a consumer reading messages from a Kafka broker ],
-)
+#figure(image("../figures/sequence-diagram-kafka-consumer.jpg", width: 70%), caption: [
+  Sequence diagram of a consumer reading messages from a Kafka broker
+])
 
 === Kafka architectural tactics
 There are some tactics used to improve some features of Kafka. In the following section we can see scalability and fault tolerance.
@@ -181,17 +179,19 @@ Before we introduce the architectural styles for data-intensive applications, we
 
 *Stream processing* (also known as event stream processing, data stream processing, or distributed stream processing) is a programming paradigm which views streams, or sequences of events in time, as the central input and output objects of computation.
 
-#table(
-  columns: 2,
-  [*Batch*], [*Stream*],
-  [Has access to all data.], [Computes a function of one data element, or a smallish window of recent data.],
-  [Might compute something big and complex.], [Computes something relatively sim-ple.],
-  [Is generally more concerned with throughput than latency of individual components of the computation.],
-  [Needs to complete each computation in near-real-time --- probably seconds at most.],
+#figure(
+  table(
+    columns: 2,
+    [*Batch*], [*Stream*],
+    [Has access to all data.], [Computes a function of one data element, or a smallish window of recent data.],
+    [Might compute something big and complex.], [Computes something relatively sim-ple.],
+    [Is generally more concerned with throughput than latency of individual components of the computation.],
+    [Needs to complete each computation in near-real-time --- probably seconds at most.],
 
-  [Has latency measured in minutes or more.], [Computations are generally independent.],
-  [],
-  [Asynchronous --- source of data doesn't interact with the stream processing directly, like by waiting for an answer.],
+    [Has latency measured in minutes or more.], [Computations are generally independent.],
+    [],
+    [Asynchronous --- source of data doesn't interact with the stream processing directly, like by waiting for an answer.],
+  ),
 )
 
 === Batch approach: MapReduce
@@ -200,7 +200,7 @@ Before we introduce the architectural styles for data-intensive applications, we
 A MapReduce is composed of a *map procedure*, which performs filtering and sorting (such as sorting students by first name into queues, one queue for each name), and a *reduce method*, which performs a summary operation (such as counting the number of students in each queue, yielding name frequencies). The "MapReduce System" (also called "infrastructure" or "framework") orchestrates the processing by marshalling the distributed servers, running the various tasks in parallel, managing all communications and data transfers between the various parts of the system, and providing for redundancy and fault tolerance.
 
 #example("an example of a batch approach using MapReduce")[
-  #figure(image("../figures/mapreduce-example.jpg", width: 70%))
+  #figure(image("../figures/mapreduce-example.jpg", width: 50%))
 
   The workflow is the following:
   + Read a set of input files and break it into records;
@@ -209,10 +209,7 @@ A MapReduce is composed of a *map procedure*, which performs filtering and sorti
   + Call the reduce function. It iterates over the ordered sets of key-value pairs and combines the values (the combination logic is application-dependent)
 ]
 
-#figure(
-  image("../figures/mapreduce-architecture.jpg", width: 70%),
-  caption: [ MapReduce architecture ],
-)
+#figure(image("../figures/mapreduce-architecture.jpg", width: 70%), caption: [ MapReduce architecture ])
 
 ==== Advantages
 - Works well on *commodity hardware*: *Commodity hardware* in computing is computers or components that are readily available, inexpensive and easily interchangeable with other *commodity hardware*. Almost all PCs use *commodity hardware*.
@@ -265,16 +262,10 @@ This approach to architecture attempts to balance latency, throughput, and fault
 
 The rise of lambda architecture is correlated with the growth of big data, real-time analytics, and the drive to *mitigate the latencies of map-reduce*.
 
-#figure(
-  image("../figures/lambda-architecture.jpg", width: 80%),
-  caption: [ Lambda architecture ],
-)
+#figure(image("../figures/lambda-architecture.jpg", width: 80%), caption: [ Lambda architecture ])
 
 Exist also *Kappa architecture*. Kappa architecture is a software architecture used for processing streaming data with a single technology stack. It is a simplification of Lambda architecture, where the data is processed in batches. Kappa architecture ingests data into a messaging system like Apache Kafka, and performs both real-time and batch processing, especially for analytics, on the same stream. It allows for recomputation on the data by streaming it through the pipeline again.
 
-#figure(
-  image("../figures/kappa-architecture.jpg", width: 80%),
-  caption: [ Kappa architecture ],
-)
+#figure(image("../figures/kappa-architecture.jpg", width: 80%), caption: [ Kappa architecture ])
 
 #pagebreak()
