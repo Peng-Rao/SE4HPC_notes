@@ -17,10 +17,7 @@ Since it is impossible to have zero defects, a *periodic quality assurance evalu
 
 The V-model is a *graphical representation of a systems development lifecycle*. It is used to produce rigorous development lifecycle models and project management models. It describes the activities and the results that must be made during product development.
 
-#figure(
-  image("../figures/V-model.jpg", width: 80%),
-  caption: [ V-model ],
-)
+#figure(image("../figures/V-model.jpg", width: 80%), caption: [ V-model ])
 
 The _left side_ of the "V" represents the decomposition of requirements and the creation of system specifications. The _right side_ of the "V" represents an integration of parts and their validation.
 
@@ -52,10 +49,7 @@ A *Petri Net (PT Net or P/T Net)*, a place/transition net (PT net), is one of se
 
 The Petri net uses a graphic tool. It is a bipartite-directed graph containing places (circles), transitions (bars), and directed arcs.
 
-#figure(
-  image("../figures/Petri-net-graphic.jpg", width: 50%),
-  caption: [ Petri net graphic ],
-)
+#figure(image("../figures/Petri-net-graphic.jpg", width: 50%), caption: [ Petri net graphic ])
 
 A Petri net is a five-tuple $N = (P, T, F, W, M^0)$ where:
 - $P$ is a finite set of places;
@@ -120,26 +114,19 @@ The buffer can hold a limited number of parts.
 
 ==== Producer-Consumer Model
 
-#figure(
-  image("../figures/petri-net-example-1.jpg", width: 40%),
-  caption: [ Example of Petri nets of producer-consumer model with unbounded buffer. ],
-)
+#figure(image("../figures/petri-net-example-1.jpg", width: 40%), caption: [
+  Example of Petri nets of producer-consumer model with unbounded buffer.
+])
 
-#figure(
-  image("../figures/petri-net-example-2.jpg", width: 40%),
-  caption: [
-    Example of Petri nets of producer-consumer model with finite buffer with a parametric number of positions.
-  ],
-)
+#figure(image("../figures/petri-net-example-2.jpg", width: 40%), caption: [
+  Example of Petri nets of producer-consumer model with finite buffer with a parametric number of positions.
+])
 
 ==== Deadlock
 
-#figure(
-  image("../figures/petri-net-example-3.jpg", width: 60%),
-  caption: [
-    Example of Petri nets of deadlock.
-  ],
-)
+#figure(image("../figures/petri-net-example-3.jpg", width: 60%), caption: [
+  Example of Petri nets of deadlock.
+])
 
 === Example: Traffic Semaphore
 Consider a *traffic semaphore* with the usual colors red, green and yellow. The semaphore can be of one color at a time and, in a cyclic manner, after being red, it can become green, then yellow, and then red again to restart the cycle.
@@ -153,10 +140,7 @@ The Petri net consists of three places: *R* (red), *G* (green), and *Y* (yellow)
 2. From *G* to *Y*: This transition fires when the semaphore is green, removing the token from *G* and adding it to *Y*.
 3. From *Y* to *R*: This transition fires when the semaphore is yellow, removing the token from *Y* and adding it back to *R*.
 
-#figure(
-  image("../figures/petri-example-1.jpg", width: 50%),
-  caption: [ Petri net of a traffic semaphore. ],
-)
+#figure(image("../figures/petri-example-1.jpg", width: 50%), caption: [ Petri net of a traffic semaphore. ])
 
 ==== Question 2
 Consider *two semaphores synchronized* to control a street intersection. Initially, one of them is red and the other green. Moreover, *one can move from red to green only when the other moves from yellow to red*. Extend the single semaphore Petri net to model the two semaphores and the defined rule. Provide a short and clear description of your choices.
@@ -167,20 +151,16 @@ Transitions $T_1$ and $T_3$ are the ones that determine the movements from $Y_x$
 
 We can also see that $T_1$ occurs always after $T_4$. Similarly, the transitions causing a movement of tokens from $R_2$ to $G_2$ and from $G_1$ to $Y_1$ are $T_3$ and $T_2$, respectively. Again, $T_3$ occurs always after $T_2$.
 
-#figure(
-  image("../figures/petri-example-2.jpg", width: 50%),
-  caption: [ Synchronized semaphores. ],
-) <example2>
+#figure(image("../figures/petri-example-2.jpg", width: 50%), caption: [ Synchronized semaphores. ]) <example2>
 
 ==== Question 3
 Demonstrate that, given an initial marking representing in your Petri net one green semaphore and one red semaphore, *it can never happen that the two semaphores are green at the same time*.
 
 @fig:reachability-graph-example-1 shows the reachability graph of the Petri net in @fig:example2. Given the initial marking, the case ${G_1, G_2}$ never occurs, thus demonstrating that the fulfill the required constraint.
 
-#figure(
-  image("../figures/reachability-graph-example-1.jpg", width: 50%),
-  caption: [ Reachability graph ],
-) <reachability-graph-example-1>
+#figure(image("../figures/reachability-graph-example-1.jpg", width: 50%), caption: [
+  Reachability graph
+]) <reachability-graph-example-1>
 
 ==== Question 4
 Reflect on the behavior of your Petri net. Which one of the following three sentences is true in your case? Provide a justification for your answer.
@@ -211,10 +191,7 @@ In general, a *service shall be continuously available* to the user, and if it f
 === System Life-Cycle
 The System Life-Cycle relates to failures in the following way:
 
-#figure(
-  image("../figures/system-life-cycle.jpg", width: 80%),
-  caption: [ The System Life-Cycle when faults occur. ],
-)
+#figure(image("../figures/system-life-cycle.jpg", width: 80%), caption: [ The System Life-Cycle when faults occur. ])
 - *Time of occurrence*. Time at which the user becomes aware of the failure.
 - *Detection time*. Time at which operators become aware of the failure.
 - *Response time*. Time required by operators to diagnose the issue and respond to users.
@@ -237,10 +214,7 @@ Availability is typically specified in "*nines notation*". For example, 3-nines 
 #align(center)[
   #table(
     columns: 2,
-    table.header(
-      [*Availability*],
-      [*Downtime per year*],
-    ),
+    table.header([*Availability*], [*Downtime per year*]),
 
     [90% (1-nine)], [36.5 days/year],
     [99% (2-nines)], [3.65 days/year],
@@ -293,18 +267,10 @@ Some well-known tactics are:
 
 ==== Replication approaches
 The *Replication* is very simple to manage in the case of stateless components. The approaches are different:
-+ *Hot spare*: One component leads, and another is always ready to take over. In the following example, C1 leads, C2 is always ready to take over. #figure(
-    image("../figures/hot-spare.jpg", width: 50%),
-  )
-+ *Warm spare*: One component leads and *periodically* updates another component. If the primary component fails, the second component takes time to update itself fully. C1 is leading and periodically updating C2. If C1 fails, some time might be needed to fully update C2. #figure(
-    image("../figures/warm-spare.jpg", width: 50%),
-  )
-+ *Cold spare*: A second component is dormant, started, and updated only if required. In the following example, C2 is dormant, started, and updated only if required. #figure(
-    image("../figures/cold-spare.jpg", width: 50%),
-  )
-+ *Triple modular redundancy*: Three components are always active, and the result is the one produced by the majority. This is good when reliability is also important. In the following example, C1, C2, and C3 are all active. The result is the one produced by the majority. #figure(
-    image("../figures/triple-redundancy.jpg", width: 50%),
-  )
++ *Hot spare*: One component leads, and another is always ready to take over. In the following example, C1 leads, C2 is always ready to take over. #figure(image("../figures/hot-spare.jpg", width: 50%))
++ *Warm spare*: One component leads and *periodically* updates another component. If the primary component fails, the second component takes time to update itself fully. C1 is leading and periodically updating C2. If C1 fails, some time might be needed to fully update C2. #figure(image("../figures/warm-spare.jpg", width: 50%))
++ *Cold spare*: A second component is dormant, started, and updated only if required. In the following example, C2 is dormant, started, and updated only if required. #figure(image("../figures/cold-spare.jpg", width: 50%))
++ *Triple modular redundancy*: Three components are always active, and the result is the one produced by the majority. This is good when reliability is also important. In the following example, C1, C2, and C3 are all active. The result is the one produced by the majority. #figure(image("../figures/triple-redundancy.jpg", width: 50%))
 
 ==== Forward error recovery
 *Forward Error Recovery* is a *tactic* in which a recovery mechanism moves the failed component to a degraded state. In a degraded state, a component continues to be available even if it is not fully functional. Here is an example:
@@ -326,10 +292,7 @@ Consider the following instance of a Kafka cluster. Suppose that the servers on 
 - Server Broker 2: 94%
 - Server Broker 3: 98%
 
-#figure(
-  image("../figures/kafka-cluster-example.jpg", width: 80%),
-  caption: [ Kafka cluster with three Brokers. ],
-)
+#figure(image("../figures/kafka-cluster-example.jpg", width: 80%), caption: [ Kafka cluster with three Brokers. ])
 
 As illustrated by the schema, _Consumers_, retrieve various messages concerning certain topics. Messages are obtained through the `getMessages` operation, which can retrieve messages from any broker handling a topic and partition. For the purpose of this exercise, assume that the messages have already been published. Assume also that the schema shows all the existing partitions for the depicted topics.
 
@@ -427,72 +390,54 @@ int fun(int x, int y)
 ==== Question 1
 Derive the path condition corresponding to the execution of path 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, 13, 14, 12, 13, 14, 12, 13, 15, 12, 16, 17.
 
-#figure(
-  table(
-    columns: 6,
-    stroke: 0.7pt,
-    align: center,
-    table.header(
-      [*\#*],
-      [*$x$*],
-      [*$y$*],
-      [*$z$*],
-      [*$k$*],
-      [$bold(pi)$],
-    ),
+#figure(table(
+  columns: 6,
+  stroke: 0.7pt,
+  align: center,
+  table.header([*\#*], [*$x$*], [*$y$*], [*$z$*], [*$k$*], [$bold(pi)$]),
 
-    [1-3], [$X$], [$Y$], [], [], [],
-    [4], [$X$], [$Y$], [], [], [$X times Y != 0$],
-    [6], [$X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
-    [7], [$-X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
-    [8], [$-X$], [$Y$], [], [], [$(X < 0) and (Y > 0)$],
-    [10], [$-X$], [$Y$], [$-X$], [], [$(X < 0) and (Y > 0)$],
-    [11], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0)$],
-    [12], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X != Y)$],
-    [13], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y)$],
-    [14], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y)$],
-    [12], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X-Y != Y)$],
-    [13], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X-Y > Y)$],
-    [14], [$-X-2Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X > 2Y)$],
-    [12], [$-X-2Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X < 3Y)$],
-    [15], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X < 3Y)$],
-    [12], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y)$],
-    [16], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y) and (-X% (-X / 5) =0)$],
-    [17], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y)$],
-  ),
-)
+  [1-3], [$X$], [$Y$], [], [], [],
+  [4], [$X$], [$Y$], [], [], [$X times Y != 0$],
+  [6], [$X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+  [7], [$-X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+  [8], [$-X$], [$Y$], [], [], [$(X < 0) and (Y > 0)$],
+  [10], [$-X$], [$Y$], [$-X$], [], [$(X < 0) and (Y > 0)$],
+  [11], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0)$],
+  [12], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X != Y)$],
+  [13], [$-X$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y)$],
+  [14], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y)$],
+  [12], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X-Y != Y)$],
+  [13], [$-X-Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X-Y > Y)$],
+  [14], [$-X-2Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X > 2Y)$],
+  [12], [$-X-2Y$], [$Y$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X < 3Y)$],
+  [15], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-X > Y) and (-X < 3Y)$],
+  [12], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y)$],
+  [16], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y) and (-X% (-X / 5) =0)$],
+  [17], [$-X-2Y$], [$3Y+X$], [$-X$], [$Y$], [$(X < 0) and (Y > 0) and (-2X=5Y)$],
+))
 The path condition is consistent. Possible test case: $x = -10$ and $y = 4$.
 
 ==== Question 2
 Derive the path condition corresponding to the execution of path 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 16, 18.
 
-#figure(
-  table(
-    columns: 6,
-    stroke: 0.7pt,
-    align: center,
-    table.header(
-      [*\#*],
-      [*$x$*],
-      [*$y$*],
-      [*$z$*],
-      [*$k$*],
-      [$bold(pi)$],
-    ),
+#figure(table(
+  columns: 6,
+  stroke: 0.7pt,
+  align: center,
+  table.header([*\#*], [*$x$*], [*$y$*], [*$z$*], [*$k$*], [$bold(pi)$]),
 
-    [1-3], [$X$], [$Y$], [], [], [],
-    [4], [$X$], [$Y$], [], [], [$X times Y != 0$],
-    [6], [$X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
-    [7], [$-X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
-    [8], [$-X$], [$Y$], [], [], [$(X < 0) and (Y < 0)$],
-    [9], [$-X$], [$-Y$], [], [], [$(X < 0) and (Y < 0)$],
-    [10], [$-X$], [$-Y$], [$-X$], [], [$(X < 0) and (Y < 0)$],
-    [11], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (Y < 0)$],
-    [12], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (Y < 0) and (-X != -Y)$],
-    [16], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (-X = -Y) and ((-X)%(-X) != 0)$],
-    [18], [], [], [], [], [],
-  ),
-)
+  [1-3], [$X$], [$Y$], [], [], [],
+  [4], [$X$], [$Y$], [], [], [$X times Y != 0$],
+  [6], [$X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+  [7], [$-X$], [$Y$], [], [], [$(X < 0) and (Y != 0)$],
+  [8], [$-X$], [$Y$], [], [], [$(X < 0) and (Y < 0)$],
+  [9], [$-X$], [$-Y$], [], [], [$(X < 0) and (Y < 0)$],
+  [10], [$-X$], [$-Y$], [$-X$], [], [$(X < 0) and (Y < 0)$],
+  [11], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (Y < 0)$],
+  [12], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (Y < 0) and (-X != -Y)$],
+  [16], [$-X$], [$-Y$], [$-X$], [$-Y$], [$(X < 0) and (-X = -Y) and ((-X)%(-X) != 0)$],
+  [18], [], [], [], [], [],
+))
 
 The path condition is not feasible as it is not possible that $(-X)%(-X) != 0$. Therefore, the path cannot be executed.
 
@@ -521,10 +466,9 @@ def foo(a, b, c):
 ==== Question 1
 Consider the function foo and carry out a symbolic execution for all paths (note that, in this case, the number of paths is finite). Given that this code fragment does not contain loops, you may be facilitated in your work if you create a binary tree to represent these paths. The nodes of the tree shall include at least the initial symbolic assignment in lines 0-2 (root), the final assignments (leaves), and all the conditional statements (internal nodes). You can annotate the arcs with the conditions and assignments that are relevant to the corresponding part of the code. For each path (i.e., each leaf of the previous tree structure), determine the symbolic condition that ensures the execution of the corresponding path. Then, identify the unfeasible path(s), if any.
 
-#figure(
-  image("../figures/symbolic-execution-tree.jpg", width: 80%),
-  caption: [ Symbolic execution tree of the function foo. ],
-)
+#figure(image("../figures/symbolic-execution-tree.jpg", width: 80%), caption: [
+  Symbolic execution tree of the function foo.
+])
 
 There are 6 leaves (from left to right) with the following path conditions:
 - $A[B] < 0 and A[B] >= 3$. Path: 0, 1, 2, 3, 6, 7, 8, 9, 10, 15, 16, 17 *(unfeasible)*
@@ -538,7 +482,7 @@ There are 6 leaves (from left to right) with the following path conditions:
 Suppose that we wanted to guarantee that the result of the foo function is not zero. According to the previous analysis, try to determine a pre-condition among the possible ones that ensures the satisfaction of this property.
 
 - $|a| = 10$ and $0 < b < 9$ and $a[b] < 0$ and $a[2] != 0$
-- $|a| = 10$ and $0 < b < 9$ and $a[b] \ge 3$ and $a[5] != 0$
+- $|a| = 10$ and $0 < b < 9$ and $a[b] > 3$ and $a[5] != 0$
 - $|a| = 10$ and $0 < b < 9$ and $0 < a[b] < 3$ and $c = 0$ and $a[7] != 0$
 - $|a| = 10$ and $0 < b < 9$ and ($a[b] = 0$ or ($0 < a[b] < 3$ and $c != 0$)) and $a[4] != 0$
 

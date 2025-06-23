@@ -3,10 +3,7 @@
 == Introduction
 *Testing Workflow* is a *type of software testing that verifies that each software workflow accurately reflects the given business process*. A workflow is a series of tasks to produce a desired result, usually involving several stages or steps. For any business process, testing these sequential steps is defined as "workflow testing".
 
-#figure(
-  image("../figures/testing-workflow.jpg", width: 90%),
-  caption: [ Testing workflow ],
-)
+#figure(image("../figures/testing-workflow.jpg", width: 90%), caption: [ Testing workflow ])
 
 *Testing* (dynamic analysis) is an approach to verification. The *main goal of testing is to make programs fail*. Other common goals are:
 - Exercise different parts of a program to increase coverage;
@@ -69,20 +66,14 @@ Work from the top level (in terms of "use" or "include" relationship) down to th
 - *Pros*: The drivers use the top level interfaces (e.g. REST APIs).
 - *Cons*: This strategy requires stubs of used modules at each step of the process.
 
-#figure(
-  image("../figures/example-top-down.jpg", width: 50%),
-  caption: [ Example of top-down strategy ],
-)
+#figure(image("../figures/example-top-down.jpg", width: 50%), caption: [ Example of top-down strategy ])
 
 ==== *Bottom-up strategy*
 Starting from the leaves of the "uses" hierarchy.
 - *Pros*: An advantage is that it doesn't require stubs.
 - *Cons*: Typically requires more drivers (one for each module, as in unit testing). Another thing to consider is that it may create several working subsystems, and each working subsystem will eventually be integrated into the final one.
 
-#figure(
-  image("../figures/example-bottom-up.jpg", width: 50%),
-  caption: [ Example of bottom-up strategy ],
-)
+#figure(image("../figures/example-bottom-up.jpg", width: 50%), caption: [ Example of bottom-up strategy ])
 
 ==== *Threads strategy*
 A thread is a part of several modules that together provide a user-visible programme function. By using the thread strategy we can have some advantages.
@@ -92,18 +83,14 @@ A thread is a part of several modules that together provide a user-visible progr
 - Reduce drivers and stubs;
 - An integration plan is usually more complex.
 
-#figure(
-  image("../figures/example-thread.jpg", width: 50%),
-  caption: [ Example of thread strategy ],
-)
+#figure(image("../figures/example-thread.jpg", width: 50%), caption: [ Example of thread strategy ])
 
 ==== *Critical modules strategy*
 The critical modules strategy starts with the highest risk modules. Risk assessment is a necessary first step. *The key point of this strategy is the risk-oriented process*. Integration and testing as a risk mitigation activity, designed to deliver any bad news as early as possible.
 
-#figure(
-  image("../figures/summary-integration-test-strategies.jpg", width: 80%),
-  caption: [ Summary of integration test strategies ],
-)
+#figure(image("../figures/summary-integration-test-strategies.jpg", width: 80%), caption: [
+  Summary of integration test strategies
+])
 
 Given the three strategies above, which one should we choose? Well, the structural strategies (bottom-up or top-down) are simpler, but thread and critical modules provide better external visibility of progress (especially in complex systems).
 
@@ -113,10 +100,9 @@ So the *best choice* should be a *combination of different strategies*:
 
 === Example: Integration Testing of Miscroservices
 
-#figure(
-  image("../figures/integration-testing-microservices.jpg", width: 70%),
-  caption: [ Example of integration testing of microservices ],
-)
+#figure(image("../figures/integration-testing-microservices.jpg", width: 70%), caption: [
+  Example of integration testing of microservices
+])
 
 The architecture is organized into eight stateless microservices collaborating to fulfill requests `R1` and `R2`. `S1` is the front-end service that receives both requests. The fulfillment of request `R1` requires the interaction with services `S2` and `S3` (through sub-requests `R1.1` and `R1.2`, respectively), which, in turn, need to interact with other services. In particular, `S2` interacts with `S4` and `S5` and `S3` with `S5` and `S6`. The fulfillment of `R2` requires that `S1` interacts with `S8`, which, in turn, interacts with `S6` and `S7`.
 
